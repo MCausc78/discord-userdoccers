@@ -1,0 +1,35 @@
+# Stream Resource
+
+A _stream_ holds information about a video with dynamic length.
+
+### Stream Object
+
+###### Stream Structure
+
+| Field         | Type             | Description                                                                           |
+| ------------- | ---------------- | ------------------------------------------------------------------------------------- |
+| paused        | boolean          | Whether the stream is paused                                                          |
+| region        | string           | The [voice region](/resources/voice#voice-region-object) ID the stream is hosted from |
+| rtc_server_id | snowflake        | The ID of the RTC server                                                              |
+| stream_key    | string           | The encoded key of the stream                                                         |
+| viewer_ids    | array[snowflake] | The IDs of the users that are viewing this stream                                     |
+
+## Endpoints
+
+<RouteHeader method="GET" url="/streams/{stream_key}/preview">
+  Get Stream Preview
+</RouteHeader>
+
+Returns a stream preview object for the given stream key.
+
+###### Query String Params
+
+| Field   | Type    | Description                                               |
+| ------- | ------- | --------------------------------------------------------- |
+| version | integer | Get stream preview after this Unix time (in milliseconds) |
+
+###### Response Body
+
+| Field | Type   | Description            |
+| ----- | ------ | ---------------------- |
+| url   | string | The stream preview URL |

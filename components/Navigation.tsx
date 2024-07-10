@@ -552,6 +552,17 @@ export default function Navigation() {
           Sticker
         </NavigationLink>
         <NavigationLink
+          href="/resources/stream"
+          subLinks={
+            <Fragment>
+              <NavigationSubLink href="/resources/stream#stream-object">Stream Object</NavigationSubLink>
+              <NavigationSubLink href="/resources/stream#endpoints">Endpoints</NavigationSubLink>
+            </Fragment>
+          }
+        >
+          Stream
+        </NavigationLink>
+        <NavigationLink
           href="/resources/team"
           subLinks={
             <Fragment>

@@ -546,6 +546,10 @@ Received events are Gateway events encapsulated in an [event payload](#gateway-p
 | [Stage Instance Create](#stage-instance-create)                                   | Stage instance was created                                                                                    |
 | [Stage Instance Update](#stage-instance-update)                                   | Stage instance was updated                                                                                    |
 | [Stage Instance Delete](#stage-instance-delete)                                   | Stage instance was deleted or closed                                                                          |
+| [Stream Create](#stream-create)                                                   | Channel stream created                                                                                        |
+| [Stream Update](#stream-update)                                                   | Channel stream updated                                                                                        |
+| [Stream Delete](#stream-delete)                                                   | Channel stream deleted                                                                                        |
+| [Stream Server Update](#stream-server-update)                                     | Stream connection server was updated                                                                          |
 | [Typing Start](#typing-start)                                                     | User started typing in a channel                                                                              |
 | [User Update](#user-update)                                                       | Current user changed                                                                                          |
 | [User Note Update](#user-note-update)                                             | User note was updated                                                                                         |
@@ -1824,6 +1828,58 @@ Sent when a [stage instance](/resources/stage-instance) is updated. The inner pa
 #### Stage Instance Delete
 
 Sent when a [stage instance](/resources/stage-instance) is deleted (i.e. the stage has been closed). The inner payload is a [stage instance](/resources/stage-instance#stage-instance-object) object.
+
+### Streams
+
+#### Stream Create
+
+Sent when a stream is created. Inner payload is a [stream](/resources/stream#stream-object) object.
+
+#### Stream Update
+
+Sent when a stream is updated. Inner payload is a [stream](/resources/stream#stream-object) object.
+
+#### Stream Delete
+
+Sent when a stream is deleted.
+
+###### Stream Delete Structure
+
+| Field      | Type   | Description                   |
+| ---------- | ------ | ----------------------------- |
+| reason     | string | The stream deletion reason    |
+| stream_key | string | The encoded key of the stream |
+
+#### Stream Server Update
+
+Sent when a guild or call's stream server is updated. This is sent when initially creating a stream, and when the current stream instance fails over to a new server.
+
+<Alert type="warn">
+
+A `null` endpoint means that the stream server allocated has gone away and is trying to be reallocated. You should attempt to disconnect from the currently connected stream server, and not attempt to reconnect until a new stream server is allocated.
+
+</Alert>
+
+###### Stream Server Update Structure
+
+| Field       | Type       | Description                                          |
+| ----------- | ---------- | ---------------------------------------------------- |
+| token       | string     | The stream connection token                          |
+| guild_id    | ?snowflake | The guild this stream server update is for           |
+| channel_id? | snowflake  | The private channel this stream server update is for |
+| stream_key  | string     | The stream key                                       |
+| endpoint    | ?string    | The stream server host                               |
+
+###### Example Stream Server Update Payload
+
+```json
+{
+  "token": "my_token",
+  "guild_id": null,
+  "stream_key": "guild:1015060230222131221:1028117287716261939:852892297661906993",
+  "endpoint": "smart.loyal.discord.media:443"
+}
+```
 
 ### Typing
 
