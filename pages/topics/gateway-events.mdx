@@ -353,6 +353,49 @@ When using the `AUTO_CALL_CONNECT` [Gateway capability](/topics/gateway#gateway-
 }
 ```
 
+#### Create Stream
+
+Used to create a stream. Fires a [Stream Create](#stream-create) Gateway event.
+
+###### Create Stream Structure
+
+| Field      | Type       | Description                                |
+| ---------- | ---------- | ------------------------------------------ |
+| type       | string     | The type of the stream (`call` or `guild`) |
+| guild_id   | ?snowflake | The ID of the guild                        |
+| channel_id | snowflake  | The ID of the channel to start stream in   |
+
+#### Delete Stream
+
+Used to delete a stream. Fires a [Stream Delete](#stream-delete) Gateway event.
+
+###### Delete Stream Structure
+
+| Field      | Type   | Description                   |
+| ---------- | ------ | ----------------------------- |
+| stream_key | string | The encoded key of the stream |
+
+#### Watch Stream
+
+Used to watch a stream. Fires a [Stream Update](#stream-update) Gateway event.
+
+###### Watch Stream Structure
+
+| Field      | Type   | Description                   |
+| ---------- | ------ | ----------------------------- |
+| stream_key | string | The encoded key of the stream |
+
+#### Set Stream Paused
+
+Used to pause/resume a client stream. Fires a [Stream Update](#stream-update) Gateway event.
+
+###### Set Stream Paused Structure
+
+| Field      | Type    | Description                   |
+| ---------- | ------- | ----------------------------- |
+| stream_key | string  | The encoded key of the stream |
+| paused     | boolean | Whether the stream is paused  |
+
 #### Request Soundboard Sounds
 
 Used to request soundboard sounds for a list of guilds. Fires a [Soundboard Sounds](#soundboard-sounds) Gateway event for every guild in response.
