@@ -2005,6 +2005,8 @@ Resends the verification code. Returns a 204 empty response on success.
 
 Adds the phone. Returns a 204 empty response on success. If `phone` is provided, this begins the verification process, otherwise `phone_token` and `password` are required.
 
+###### JSON Params
+
 | Field               | Type   | Description                                                    |
 | ------------------- | ------ | -------------------------------------------------------------- |
 | password?           | string | The user's password                                            |
@@ -2012,105 +2014,39 @@ Adds the phone. Returns a 204 empty response on success. If `phone` is provided,
 | phone_token?        | string | The token received from [verify phone](#verify-phone) endpoint |
 | change_phone_reason | string | The [removal reason](#change-phone-reason)                     |
 
-<RouteHeader method="POST" url="/users/@me/phone">
-  Add Phone
+<RouteHeader method="POST" url="/users/@me/phone/reverify">
+  Reverify Phone
 </RouteHeader>
+
+Reverifies the phone. Returns a 204 empty response on success. If `phone` is provided, this starts the verification process again, otherwise `phone_token` and `password` are required.
+
+###### JSON Params
+
+| Field               | Type   | Description                                                    |
+| ------------------- | ------ | -------------------------------------------------------------- |
+| password?           | string | The user's password                                            |
+| phone?              | string | The E.164-formatted phone number to use                        |
+| phone_token?        | string | The token received from [verify phone](#verify-phone) endpoint |
+| change_phone_reason | string | The [removal reason](#change-phone-reason)                     |
+
+<RouteHeader method="POST" url="/users/@me/phone/reverify">
+  Verify Phone
+</RouteHeader>
+
+Verifies the phone.
+
+###### JSON Params
+
+| Field | Type   | Description                                |
+| ----- | ------ | ------------------------------------------ |
+| phone | string | The E.164-formatted phone number to verify |
+| code  | string | The code received from SMS message         |
 
 ###### Response Body
 
-| Field                 | Type                                             | Description                                     |
-| --------------------- | ------------------------------------------------ | ----------------------------------------------- |
-| nitro_sticker_sends   | [premium usage](#premium-usage-structure) object | The number of Nitro sticker the user has sent   |
-| total_animated_emojis | [premium usage](#premium-usage-structure) object | The number of animated emojis the user has sent |
-| total_global_emojis   | [premium usage](#premium-usage-structure) object | The number of global emojis the user has sent   |
-| total_large_uploads   | [premium usage](#premium-usage-structure) object | The number of large uploads the user has made   |
-| total_hd_streams      | [premium usage](#premium-usage-structure) object | The number of streams the user has made in HD   |
-| hd_hours_streamed     | [premium usage](#premium-usage-structure) object | The number of hours the user has streamed in HD |
-
-```py
-class ChangePhoneReason(Enum):
-    user_action_required = 'user_action_required'
-    user_settings_update = 'user_settings_update'
-    guild_phone_required = 'guild_phone_required'
-    mfa_phone_update = 'mfa_phone_update'
-    contact_sync = 'contact_sync'
-
-class VerifyPhoneResponseBody(TypedDict):
-    token: str
-
-class PhoneHTTPClient(discord.http.HTTPClient):
-    def remove_phone(
-        self,
-        password: str,
-        change_phone_reason: ChangePhoneReason,
-    ) -> Response[None]:
-        payload = {
-            'password': password,
-            'change_phone_reason': change_phone_reason.value
-        }
-        route = discord.http.Route('DELETE', '/users/@me/phone')
-        return self.request(route, json=payload)
-
-    def resend_code(self, phone: str) -> Response[None]:
-        payload = {'phone': phone}
-        route = discord.http.Route('POST', '/phone-verifications/resend')
-        return self.request(route, json=payload)
-
-    def begin_add_phone(
-        self,
-        phone: str,
-        change_phone_reason: ChangePhoneReason,
-    ) -> Response[None]:
-        payload = {
-            'phone': phone,
-            'change_phone_reason': change_phone_reason.value
-        }
-        route = discord.http.Route('POST', '/users/@me/phone')
-        return self.request(route, json=payload)
-
-    def add_phone(
-        self,
-        phone_token: str,
-        password: str,
-        change_phone_reason: ChangePhoneReason,
-    ) -> Response[None]:
-        payload = {
-            'phone_token': phone_token,
-            'password': password,
-            'change_phone_reason': change_phone_reason.value
-        }
-        route = discord.http.Route('POST', '/users/@me/phone')
-        return self.request(route, json=payload)
-
-    def begin_reverify_phone(
-        self,
-        phone: str,
-        change_phone_reason: ChangePhoneReason,
-    ) -> Response[None]:
-        payload = {
-            'phone': phone,
-            'change_phone_reason': change_phone_reason.value
-        }
-        route = discord.http.Route('POST', '/users/@me/phone/reverify')
-        return self.request(route, json=payload)
-
-    def reverify_phone(self, phone_token: str, password: str, change_phone_reason: ChangePhoneReason) -> Response[None]:
-        payload = {
-            'phone_token': phone_token,
-            'password': password,
-            'change_phone_reason': change_phone_reason.value
-        }
-        route = discord.http.Route('POST', '/users/@me/phone/reverify')
-        return self.request(route, json=payload)
-
-    def verify_phone(self, phone: str, code: str) -> Response[VerifyPhoneResponseBody]:
-        payload = {
-            'phone': phone,
-            'code': code
-        }
-        route = discord.http.Route('POST', '/phone-verifications/verify')
-        return self.request(route, json=payload)
-```
+| Field | Type   | Description                 |
+| ----- | ------ | --------------------------- |
+| token | string | The token used to add phone |
 
 ###### Change Phone Reason
 
