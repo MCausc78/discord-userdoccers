@@ -2004,6 +2004,7 @@ Resends the verification code. Returns a 204 empty response on success.
 </RouteHeader>
 
 Adds the phone. Returns a 204 empty response on success. If `phone` is provided, this begins the verification process, otherwise `phone_token` and `password` are required.
+If `phone_token` is provided, fires a [User Update](/topics/gateway-events#user-update) and optionally [User Required Action Update](/topics/gateway-events#user-required-action-update) Gateway event.
 
 ###### JSON Params
 
@@ -2019,6 +2020,7 @@ Adds the phone. Returns a 204 empty response on success. If `phone` is provided,
 </RouteHeader>
 
 Reverifies the phone. Returns a 204 empty response on success. If `phone` is provided, this starts the verification process again, otherwise `phone_token` and `password` are required.
+If `phone_token` is provided, fires a [User Update](/topics/gateway-events#user-update) and optionally [User Required Action Update](/topics/gateway-events#user-required-action-update) Gateway event.
 
 ###### JSON Params
 
