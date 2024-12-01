@@ -16,7 +16,7 @@ During calculation, per-route rate limits often account for top-level resources 
 
 <Alert type="warn">
 
-[Routes for controlling emojis](/resources/emoji#get-guild-emojis) do not follow the normal rate limit conventions. These routes are specifically limited on a per-guild basis to prevent abuse. This means that the quota returned by our APIs may be inaccurate, and you may encounter **429**s.
+[Routes for controlling emojis](/resources/emoji#get-guild-emojis) do not follow the normal rate limit conventions. These routes are specifically limited on a per-guild basis to prevent abuse. This means that the quota returned by Discord APIs may be inaccurate, and you may encounter **429**s.
 
 </Alert>
 
@@ -113,9 +113,9 @@ Note that normal route rate-limiting headers will also be sent in this response.
 
 ## Global Rate Limit
 
-All users can make up to 50 requests per second to our API. If no authorization header is provided, then the limit is applied to the IP address. This is independent of any individual rate limit on a route. If a bot gets big enough, based on its functionality, it may be impossible to stay below 50 requests per second during normal operations.
+All users can make up to 50 requests per second to Discord API. If no authorization header is provided, then the limit is applied to the IP address. This is independent of any individual rate limit on a route. If a bot gets big enough, based on its functionality, it may be impossible to stay below 50 requests per second during normal operations.
 
-Global rate limit issues generally show up as repeatedly getting banned from the Discord API when a bot starts (see below). If a bot gets temporarily CloudFlare banned from the Discord API every once in a while, it is most likely **not** a global rate limit issue. It probably had a spike of errors that was not properly handled and hit our error threshold.
+Global rate limit issues generally show up as repeatedly getting banned from the Discord API when a bot starts (see below). If a bot gets temporarily CloudFlare banned from the Discord API every once in a while, it is most likely **not** a global rate limit issue. It probably had a spike of errors that was not properly handled and hit API error threshold.
 
 If a bot owner is experiencing repeated CloudFlare bans from the Discord API within normal operations of their bot, they can reach out to support to see if they qualify for increased global rate limits. They can contact Discord support using [https://dis.gd/contact](https://dis.gd/contact).
 

@@ -149,7 +149,7 @@ See the below table for the system welcome messages specific to clans.
 | 1     | "A new member has spawned. Say hi to {author}."                                 |
 | 2     | "{author} just joined the Guild. We hope you brought pizza."                    |
 | 3     | "Glad you're here, {author}, welcome to the Guild."                             |
-| 4     | "New recruit! {author} joined the Guild."                                     |
+| 4     | "New recruit! {author} joined the Guild."                                       |
 | 5     | "Round of applause for the newest Guild member, {author}. Just for being here." |
 | 6     | "Rolling out the red carpet for {author}. Say hi!"                              |
 | 7     | "Yahaha! {author} found us!"                                                    |
@@ -623,7 +623,7 @@ The media proxy caches link embeds for 30 minutes.
 
 ###### Embed Type
 
-Most embed types are "loosely defined" and, for the most part, are not used by our clients for rendering. Embed attributes power what is rendered.
+Most embed types are "loosely defined" and, for the most part, are not used by Discord clients for rendering. Embed attributes power what is rendered.
 
 | Type                              | Description                                                                              |
 | --------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -769,7 +769,7 @@ When sending/editing messages, only `id` is required. `filename` is also require
 
 The allowed mention field allows for more granular control over mentions without various hacks to the message content. This will always validate against message content to avoid phantom pings (e.g. to ping everyone, you must still have `@everyone` in the message content), and check against user permissions.
 
-###### Allowed Mention Types
+###### Allowed Mention Type
 
 | Value    | Description                           |
 | -------- | ------------------------------------- |
@@ -781,14 +781,14 @@ The allowed mention field allows for more granular control over mentions without
 
 | Field         | Type             | Description                                                                                |
 | ------------- | ---------------- | ------------------------------------------------------------------------------------------ |
-| parse?        | array[string]    | The [allowed mention types](#allowed-mention-types) to parse from the content              |
+| parse?        | array[string]    | The [allowed mention types](#allowed-mention-type) to parse from the content               |
 | roles?        | array[snowflake] | The role IDs to mention (max 100)                                                          |
 | users?        | array[snowflake] | The user IDs to mention (max 100)                                                          |
 | replied_user? | boolean          | For replies, whether to mention the author of the message being replied to (default false) |
 
 ###### Allowed Mentions Reference
 
-Due to the complexity of possibilities, we have included a set of examples and behavior for the allowed mentions field.
+Due to the complexity of possibilities, Discord have included a set of examples and behavior for the allowed mentions field.
 
 If `allowed_mentions` is _not_ passed in (i.e. the key does not exist), the mentions will be parsed via the content. This corresponds with existing behavior.
 
@@ -850,7 +850,7 @@ Due to possible ambiguities, not all configurations are valid. An _invalid_ conf
 }
 ```
 
-Because `parse: ["users"]` and `users: ["123", "124"]` are both present, we would throw a validation error.
+Because `parse: ["users"]` and `users: ["123", "124"]` are both present, Discord would throw a validation error.
 This is because the conditions cannot be fulfilled simultaneously (they are mutually exclusive).
 
 Any entities with an ID included in the list of IDs can be mentioned. Note that the IDs of entities not present in the message's content will simply be ignored.
@@ -1493,11 +1493,11 @@ The `emoji` must be [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding
 
 ###### Query String Params
 
-| Field  | Type      | Description                                                                  |
-| ------ | --------- | ---------------------------------------------------------------------------- |
-| after? | snowflake | Get users after this user ID                                                 |
-| limit? | integer   | Max number of users to return (1-100, default 25)                            |
-| type?  | integer   | The [type of reaction](#reaction-types) to get users for (default `REGULAR`) |
+| Field  | Type      | Description                                                                 |
+| ------ | --------- | --------------------------------------------------------------------------- |
+| after? | snowflake | Get users after this user ID                                                |
+| limit? | integer   | Max number of users to return (1-100, default 25)                           |
+| type?  | integer   | The [type of reaction](#reaction-type) to get users for (default `REGULAR`) |
 
 <RouteHeader method="PUT" url="/channels/{channel.id}/messages/{message.id}/reactions/{emoji}/@me">
   Create Reaction

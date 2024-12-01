@@ -45,8 +45,8 @@ A sticker that can be sent in messages.
 | name        | string                                             | The name of the sticker (2-30 characters)                                                          |
 | description | ?string                                            | The description for the sticker (max 100 characters)                                               |
 | tags ^2^    | string                                             | Autocomplete/suggestion tags for the sticker (1-200 characters)                                    |
-| type        | integer                                            | The [type of sticker](#sticker-types)                                                              |
-| format_type | integer                                            | The [type of format](#sticker-format-types) for the sticker                                        |
+| type        | integer                                            | The [type of sticker](#sticker-type)                                                               |
+| format_type | integer                                            | The [type of format](#sticker-format-type) for the sticker                                         |
 | available?  | boolean                                            | Whether this guild sticker can be used; may be false due to loss of premium subscriptions (boosts) |
 | guild_id?   | snowflake                                          | The ID of the guild the sticker is attached to                                                     |
 | user? ^1^   | partial [user](/resources/user#user-object) object | The user that uploaded the guild sticker                                                           |
@@ -57,14 +57,14 @@ A sticker that can be sent in messages.
 ^2^ A comma separated list of keywords is the format used in this field by standard stickers, but this is just a convention.
 Incidentally the client will always use a name generated from an emoji as the value of this field when creating or modifying a guild sticker.
 
-###### Sticker Types
+###### Sticker Type
 
 | Value | Name     | Description                                                 |
 | ----- | -------- | ----------------------------------------------------------- |
 | 1     | STANDARD | An official sticker in a current or legacy purchasable pack |
 | 2     | GUILD    | A sticker uploaded to a guild for the guild's members       |
 
-###### Sticker Format Types
+###### Sticker Format Type
 
 <Alert type="info">
 

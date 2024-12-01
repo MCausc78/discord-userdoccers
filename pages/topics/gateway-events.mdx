@@ -289,7 +289,7 @@ Sent when a client wants to ping a voice server. The inner `d` key should be set
 
 Used to request all members for a guild or a list of guilds. When initially connecting, if you don't have the `GUILD_PRESENCES` [Gateway intent](/topics/gateway#gateway-intents), or if the guild is over 75k members, it will only send members who are in voice, plus the member for you (the connecting user). Otherwise, if a guild has over `large_threshold` members (value in the [Gateway Identify](#identify)), it will only send members who are online, have a role, have a nickname, or are in a voice channel, and if it has under `large_threshold` members, it will send all members. If a client wishes to receive additional members, they need to explicitly request them via this operation. Fires multiple [Guild Members Chunk](#guild-members-chunk) events with up to 1000 members per chunk until all members that match the request have been sent.
 
-Due to our privacy and infrastructural concerns with this feature, there are some limitations that apply:
+Due to Discord privacy and infrastructural concerns with this feature, there are some limitations that apply:
 
 - For bots, the `GUILD_PRESENCES` privileged intent is required to request presences
 - For bots, the `GUILD_MEMBERS` privileged intent is required to request the entire member list (query of "" and limit of 0)

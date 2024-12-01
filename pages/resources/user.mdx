@@ -8,7 +8,7 @@ _not_ have a limitation on the number of guilds they can be a part of.
 
 Discord enforces the following restrictions for usernames, display names, and nicknames:
 
-1.  Names can contain most valid unicode characters. We limit some zero-width and non-rendering characters.
+1.  Names can contain most valid unicode characters. Discord limits some zero-width and non-rendering characters.
 2.  Usernames must be between 2 and 32 characters long.
 3.  Display names and nicknames must be between 1 and 32 characters long.
 4.  Webhook names must be between 1 and 80 characters long.
@@ -1752,7 +1752,7 @@ Removes a relationship with another user. Returns a 204 empty response on succes
 
 Removes multiple relationships. Returns a 204 empty response on success. May fire multiple [Relationship Remove](/topics/gateway-events#relationship-remove) Gateway events.
 
-###### Query Params
+###### Query String Params
 
 | Field              | Type    | Description                                                                                                                             |
 | ------------------ | ------- | --------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1867,10 +1867,10 @@ If the application the user is joining the program with loses the `ACTIVE` appli
 
 ###### JSON Params
 
-| Field              | Type                                                  | Description                                        |
-| ------------------ | ----------------------------------------------------- | -------------------------------------------------- |
-| application_id ^1^ | snowflake                                             | The ID of the application to join the program with |
-| channel_id ^2^     | The ID of the channel to create a follower webhook in |
+| Field              | Type      | Description                                           |
+| ------------------ | --------- | ----------------------------------------------------- |
+| application_id ^1^ | snowflake | The ID of the application to join the program with    |
+| channel_id ^2^     | snowflake | The ID of the channel to create a follower webhook in |
 
 ^1^ User must be the owner of the application or member of the current team. The application must have the [`ACTIVE` application flag](/resources/application#application-flags).
 

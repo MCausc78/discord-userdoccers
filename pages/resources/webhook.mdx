@@ -11,7 +11,7 @@ Used to represent a webhook.
 | Field               | Type                                                                        | Description                                                                                        |
 | ------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | id                  | snowflake                                                                   | The ID of the webhook                                                                              |
-| type                | integer                                                                     | The [type of webhook](#webhook-types)                                                              |
+| type                | integer                                                                     | The [type of webhook](#webhook-type)                                                               |
 | guild_id?           | ?snowflake                                                                  | The guild ID this webhook is for, if any                                                           |
 | channel_id          | ?snowflake                                                                  | The channel ID this webhook is for, if any                                                         |
 | user?               | ?partial [user](/resources/user#user-object) object                         | The user this webhook was created by                                                               |
@@ -27,7 +27,7 @@ Used to represent a webhook.
 
 ^2^ These fields will not be included if the webhook creator has since lost access to the followed channel's guild.
 
-###### Webhook Types
+###### Webhook Type
 
 | Value | Name             | Description                                                                                                    |
 | ----- | ---------------- | -------------------------------------------------------------------------------------------------------------- |
@@ -268,7 +268,7 @@ Note that when sending a message, you must provide a value for **at least one of
   Execute Slack-Compatible Webhook
 </RouteHeader>
 
-Refer to [Slack's documentation](https://api.slack.com/incoming-webhooks) for more information. We do not support Slack's `channel`, `icon_emoji`, `mrkdwn`, or `mrkdwn_in` properties.
+Refer to [Slack's documentation](https://api.slack.com/incoming-webhooks) for more information. Discord does not support Slack's `channel`, `icon_emoji`, `mrkdwn`, or `mrkdwn_in` properties.
 
 <Alert type="warn">
 
