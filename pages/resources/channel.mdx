@@ -589,6 +589,19 @@ An object that represents a tag that is able to be applied to a thread in a `GUI
 
 ^1^ At most one of `emoji_id` and `emoji_name` may be set to a non-null value.
 
+### Linked Lobby Object
+
+A lobby linked to a channel.
+
+###### Linked Lobby Structure
+
+| Field          | Type              | Description                          |
+| -------------- | ----------------- | ------------------------------------ |
+| application_id | snowflake         | The ID of the application            |
+| lobby_id       | snowflake         | The ID of the lobby                  |
+| linked_by      | snowflake         | The ID of the user who linked lobby  |
+| linked_at      | ISO8601 timestamp | When the lobby was linked to channel |
+
 ## Endpoints
 
 <RouteHeader method="GET" url="/users/@me/channels">
@@ -1507,3 +1520,9 @@ Replaces a tag in the thread-only channel. Requires the `MANAGE_CHANNELS` permis
 </RouteHeader>
 
 Deletes a tag in the thread-only channel. Requires the `MANAGE_CHANNELS` permission. Returns a [channel](#channel-object) object on success. Fires a [Channel Update](/topics/gateway-events#channel-update) Gateway event.
+
+<RouteHeader method="DELETE" url="/channels/{channel.id}/linked-lobby">
+  Remove Lobby Link
+</RouteHeader>
+
+Unlinks lobby from the channel. Requires the `MANAGE_CHANNELS` permission. Returns a [channel](#channel-object) object on success. Fires a [Lobby Update](/topics/gateway-events#lobby-update) and [Channel Update](/topics/gateway-events#channel-update) Gateway event.
