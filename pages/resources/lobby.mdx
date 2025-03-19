@@ -153,6 +153,21 @@ Creates a new lobby. Returns a [lobby](#lobby-object) object on success. Fires a
 | members?              | array[[lobby member](#lobby-member-object) object] | The users to create lobby with (max 25)                                                    |
 | idle_timeout_seconds? | integer                                            | The seconds to wait before shutting down a lobby after it becomes idle (min 5, max 604800) |
 
+<RouteHeader method="PUT" url="/lobbies">
+  Join or Create Lobby
+</RouteHeader>
+
+Joins existing lobby or creates a new lobby. Returns a [lobby](#lobby-object) object on success. May fire a [Lobby Create](/topics/gateway-events#lobby-create) Gateway event.
+
+### JSON Params
+
+| Field                 | Type                 | Description                                                                                |
+| --------------------- | -------------------- | ------------------------------------------------------------------------------------------ |
+| secret                | string               | The lobby secret                                                                           |
+| lobby_metadata        | ?map[string, string] | The metadata of the lobby (max total length 1000)                                          |
+| member_metadata       | ?map[string, string] | The metadata of the lobby member (max total length 1000)                                   |
+| idle_timeout_seconds? | integer              | The seconds to wait before shutting down a lobby after it becomes idle (min 5, max 604800) |
+
 <RouteHeader method="GET" url="/lobbies/{lobby.id}">
   Get Lobby
 </RouteHeader>

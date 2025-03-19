@@ -287,20 +287,20 @@ Sent when a client wants to request that the Gateway pings a misbehaving voice s
 
 Sent by the client to update user's voice states in multiple lobbies. Fires a [Lobby Voice State Update](#lobby-voice-state-update) and optionally [Lobby Voice Server Update](#lobby-voice-server-update) Gateway event.
 
-The inner payload is array of following object:
+The inner `d` key is array of following objects:
 
 ###### Update Lobby Voice State Structure
 
 | Field              | Type          | Description                                                                         |
 | ------------------ | ------------- | ----------------------------------------------------------------------------------- |
 | lobby_id           | snowflake     | The ID of the lobby                                                                 |
-| guild_id           | snowflake     | The ID of the lobby                                                                 |
-| lobby_id           | snowflake     | The ID of the lobby                                                                 |
 | self_mute          | boolean       | Whether the client is muted                                                         |
 | self_deaf          | boolean       | Whether the client is deafened                                                      |
 | self_video?        | boolean       | Whether the client is streaming video to the channel                                |
 | preferred_region?  | string        | The preferred [voice region](/resources/voice#voice-region-object) ID for the lobby |
 | preferred_regions? | array[string] | The ranked [voice region](/resources/voice#voice-region-object) IDs for the lobby   |
+
+{/* TODO: it seems gateway completely ignores preferred_region and preferred_regions, but sent by SDK??? Maybe remove? */}
 
 #### Create Stream
 
