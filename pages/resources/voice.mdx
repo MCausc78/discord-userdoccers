@@ -28,13 +28,14 @@ Used to represent a user's voice connection status.
 
 ### Lobby Voice State
 
-This structure is superset of [voice state](#voice-state-object), with additional fields.
+This structure is superset of [voice state](#voice-state-object) object above, with additional fields.
 
 ###### Lobby Voice State Structure
 
-|
-| channel_id |
-| lobby_id | snowflake |
+| Field      | Type       | Description                                   |
+| ---------- | ---------- | --------------------------------------------- |
+| channel_id | ?snowflake | The ID of the lobby this user is connected to |
+| lobby_id   | snowflake  | The ID of the lobby this user is connected to |
 
 ###### Example Voice State
 
