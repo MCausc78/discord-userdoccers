@@ -1466,6 +1466,54 @@ Represents a member's premium guild subscription ([boost](https://support.discor
 }
 ```
 
+### Premium Guild Subscription Slot Object
+
+Represents a premium guild subscription slot.
+
+###### Premium Guild Subscription Slot Structure
+
+| Field                      | Type                                                                     | Description                                                     |
+| -------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------- |
+| id                         | snowflake                                                                | The ID of the premium guild subscription slot                   |
+| subscription_id            | snowflake                                                                | The ID of the subscription                                      |
+| canceled                   | boolean                                                                  | Whether the premium guild subscription slot was canceled        |
+| cooldown_ends_at           | ?string                                                                  | When the cooldown for this premium guild subscription slot ends | 
+| premium_guild_subscription | ?[premium guild subscription](#premium-guild-subscription-object) object | The premium guild subscription, if the slot was already applied |
+
+###### Example Premium Guild Subscription Slot
+
+```json
+{
+  "id": "1",
+  "subscription_id": "2",
+  "canceled": false,
+  "cooldown_ends_at": null,
+  "premium_guild_subscription": {
+    "id": "1",
+    "user_id": "1",
+    "guild_id": "1",
+    "ended": false,
+    "pause_ends_at": null,
+    "user": {
+      "id": "1",
+      "username": "android",
+      "global_name": "Android",
+      "avatar": "08f104f8d5406c4d46916794fe2efeb7",
+      "avatar_decoration_data": {
+        "asset": "a_8552f9857793aed0cf816f370e2df3be",
+        "sku_id": "1232071712695386162",
+        "expires_at": null
+      },
+      "collectibles": null,
+      "discriminator": "0",
+      "public_flags": 4194560,
+      "primary_guild": null,
+      "clan": null
+    }
+  }
+}
+```
+
 ## Endpoints
 
 <RouteHeader method="GET" url="/users/@me/guilds" supportsOAuth2="guilds">
@@ -2666,6 +2714,15 @@ Onboarding enforces constraints when enabled. These constraints are that there m
 </RouteHeader>
 
 Returns a list of [premium guild subscription](#premium-guild-subscription-object) objects for the guild. User must be a member of the guild.
+
+<RouteHeader method="DELETE" >
+
+APPLIED_GUILD_BOOST: (e, t) => "/guilds/".concat(e, "/premium/subscriptions/").concat(t),
+                APPLIED_GUILD_BOOST_COOLDOWN: "/users/@me/guilds/premium/subscriptions/cooldown",
+                USER_APPLIED_GUILD_BOOSTS: "/users/@me/guilds/premium/subscriptions",
+                USER_GUILD_BOOST_SLOTS: "/users/@me/guilds/premium/subscription-slots",
+                USER_GUILD_BOOST_SLOT_CANCEL: e => "/users/@me/guilds/premium/subscription-slots/".concat(e, "/cancel"),
+                USER_GUILD_BOOST_SLOT_UNCANCEL: e => "/users/@me/guilds/premium/subscription-slots/".concat(e, "/uncancel"),
 
 <RouteHeader method="GET" url="/guilds/{guild.id}/powerups">
   Get Guild Powerups
