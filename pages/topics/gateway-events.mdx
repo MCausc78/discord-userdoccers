@@ -2821,6 +2821,22 @@ Sent when a user must complete a certain action (such as verifying their phone n
 
 Sent when someone joins/leaves/moves voice channels or calls. Inner payload is a [voice state](/resources/voice#voice-state-object) object.
 
+#### Voice State Update Batch
+
+Sent when multiple users joins/leaves/moves voice channels or calls.
+
+<Alert type="info">
+
+This event requires the `DEBOUNCE_VOICE_STATE_UPDATES` [Gateway capability](/topics/gateway#gateway-capabilities).
+
+</Alert>
+
+###### Voice State Update Batch Structure
+
+| Field        | Type                                                             | Description              |
+| ------------ | ---------------------------------------------------------------- | ------------------------ |
+| voice_states | array[[voice state](/resources/voice#voice-state-object) object] | The updated voice states |
+
 #### Voice Server Update
 
 Sent when a guild or call's voice server is updated. This is sent when initially connecting to voice, and when the current voice instance fails over to a new server.
