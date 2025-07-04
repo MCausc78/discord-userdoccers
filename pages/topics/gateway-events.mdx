@@ -1267,6 +1267,31 @@ Sent in response to [Request Channel Statuses](#request-channel-statuses). Conta
 | id     | snowflake | The ID of the channel                                |
 | status | string    | The status of the voice channel (max 500 characters) |
 
+#### Channel Unread Update
+
+Sent when guild channels unread statuses are updated.
+
+<Alert type="info">
+
+This event is not sent when using the `PASSIVE_GUILD_UPDATE` or `PASSIVE_GUILD_UPDATE_V2` [Gateway capability](/topics/gateway#gateway-capabilities).
+
+</Alert>
+
+###### Channel Unread Update Structure
+
+| Field                  | Type                                                                      | Description                 |
+| ---------------------- | ------------------------------------------------------------------------- | --------------------------- |
+| guild_id               | snowflake                                                                 | The ID of the guild         |
+| channel_unread_updates | array[[partial channel update](#partial-channel-update-structure) object] | The partial channel updates |
+
+###### Partial Channel Update Structure
+
+| Field               | Type               | Description                                      |
+| ------------------- | ------------------ | ------------------------------------------------ |
+| id                  | snowflake          | The ID of the channel                            |
+| last_message_id     | ?snowflake         | The ID of the most recent message in the channel |
+| last_pin_timestamp? | ?ISO8601 timestamp | When the most recent pinned message was pinned   |
+
 #### Voice Channel Status Update
 
 Sent when a voice channel's status is updated.
@@ -1941,6 +1966,45 @@ Sent when a guild soundboard sound is deleted.
 | -------- | --------- | ------------------------------ |
 | guild_id | snowflake | The ID of the guild            |
 | sound_id | snowflake | The ID of the soundboard sound |
+
+#### Passive Update V1
+
+Sent periodically when not subscribed to guild.
+
+<Alert type="info">
+
+This event requires the `PASSIVE_GUILD_UPDATE` [Gateway capability](/topics/gateway#gateway-capabilities).
+
+</Alert>
+
+###### Passive Update V1 Structure
+
+| Field                | Type                                                                      |                                                          |
+| -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------- |
+| guild_id             | snowflake                                                                 | The ID of the guild                                      |
+| channels             | array[[partial channel update](#partial-channel-update-structure) object] | The partial channel updates                              |
+| voice_states?        | array[[voice state](/resources/voice#voice-state-object) object]          | The voice states of the guild                            |
+| members?             | array[[guild member](/resources/guild#gulid-member-object) object]        | The updated members                                      |
+
+#### Passive Update V2
+
+Sent periodically when not subscribed to guild.
+
+<Alert type="info">
+
+This event requires the `PASSIVE_GUILD_UPDATE_V2` [Gateway capability](/topics/gateway#gateway-capabilities).
+
+</Alert>
+
+###### Passive Update V2 Structure
+
+| Field                | Type                                                                      |                                                          |
+| -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------- |
+| guild_id             | snowflake                                                                 | The ID of the guild                                      |
+| updated_members      | array[[guild member](/resources/guild#gulid-member-object) object]        | The updated members                                      |
+| updated_channels     | array[[partial channel update](#partial-channel-update-structure) object] | The partial channel updates                              |
+| updated_voice_states | array[[voice state](/resources/voice#voice-state-object) object]          | The updated voice states                                 |
+| removed_voice_states | array[snowflake]                                                          | The IDs of the users who do not have voice state anymore |
 
 #### Soundboard Sounds
 
