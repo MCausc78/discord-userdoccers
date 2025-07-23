@@ -2108,6 +2108,31 @@ Sent when a user votes on a poll. If the poll allows multiple selection, one eve
 | guild_id?  | snowflake | ID of the guild   |
 | answer_id  | integer   | ID of the answer  |
 
+#### Message Poll Vote Add Many
+
+Sent when multiple users vote to a poll in a short period of time.
+
+<Alert type="info">
+
+This event requires the `DEBOUNCE_MESSAGE_POLL_VOTES` [Gateway capability](/topics/gateway#gateway-capabilities).
+
+</Alert>
+
+###### Message Poll Vote Add Many Structure
+
+| Field      | Type                                                                | Description                 |
+| ---------- | ------------------------------------------------------------------- | --------------------------- |
+| channel_id | snowflake                                                           | The ID of the channel       |
+| message_id | snowflake                                                           | The ID of the message       |
+| guild_id?  | snowflake                                                           | The ID of the guild         |
+| votes      | array[[debounced poll vote](#debounced-poll-vote-structure) object] | The votes added to the poll |
+
+#### Debounced Poll Vote Structure
+
+| Field     | Type    | Description                   |
+| --------- | ------- | ----------------------------- |
+| answer_id | integer | The answer that was voted for |
+
 #### Message Poll Vote Remove
 
 Sent when a user removes their vote on a poll. If the poll allows for multiple selections, one event will be sent per answer.
