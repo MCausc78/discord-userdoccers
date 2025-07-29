@@ -15,7 +15,9 @@ import { ListItem, OrderedList, UnorderedList } from "./mdx/List";
 import Paragraph from "./mdx/Paragraph";
 import StrikeThrough from "./mdx/StrikeThrough";
 import Strong from "./mdx/Strong";
+import Tab from "./mdx/Tab";
 import { Table, TableData, TableHead, TableHeader, TableRow } from "./mdx/Table";
+import Tabs from "./mdx/Tabs";
 import RouteHeader from "./RouteHeader";
 
 const COMPONENTS = {
@@ -48,6 +50,8 @@ const COMPONENTS = {
   Alert,
   RouteHeader,
   Collapsible,
+  Tab,
+  Tabs,
 
   // icons
   ...MDX_ICONS,
