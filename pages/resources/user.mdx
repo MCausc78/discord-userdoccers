@@ -732,6 +732,14 @@ An Identity Verification used for application verification.
 | 14    | VERIFICATION_SCAN_FAILED_GRAYSCALE       | The scan failed due to the uploaded document having been uploaded in grayscale     |
 | 15    | VERIFICATION_UNDER_SUPPORTED_AGE         | The user is under the minimum supported age for verification                       |
 
+### Virtual Currency Balance Object
+
+###### Virtual Currency Balance Structure
+
+| Field   | Type    | Description                  |
+| ------- | ------- | ---------------------------- |
+| balance | integer | The virtual currency balance |
+
 ## Endpoints
 
 <RouteHeader method="GET" url="/users/@me" supportsOAuth2="identify">
@@ -2160,3 +2168,24 @@ Returns a [user identity verification](#user-identity-verification-object) objec
 This endpoint is deprecated. Applications must now belong to a team to be verified. As such it is replaced by [Get Team Identity Verification](/resources/team#get-team-identity-verification).
 
 </Alert>
+
+<RouteHeader method="POST" url="/virtual-currency/skus/{sku.id}/redeem">
+  Redeem Virtual Currency SKU
+</RouteHeader>
+
+Redeems the SKU. Returns a 204 empty response on success. Fires [Entitlement Create](/topics/gateway-events#entitlement-create), Payment Update, and [Virtual Currency Balance Update](/topics/gateway-events#virtual-currency-balance-update) Gateway events.
+
+User must have enough currency balance to redeem a SKU.
+
+###### JSON Params
+
+| Field               | Type   | Description                    |
+| ------------------- | ------ | ------------------------------ |
+| checkout_session_id | string | The ID of the checkout session |
+
+<RouteHeader method="GET" url="/users/@me/virtual-currency/balance">
+  Get User Virtual Currency Balance
+</RouteHeader>
+
+
+Returns a [virtual currency balance](#virtual-currency-balance-object) object for the current user.
