@@ -148,6 +148,42 @@ Multiple different resources are queryable with the application command index st
 
 ^1^ This field will sometimes be an empty array when requested via [Get Application Command Index](#get-application-command-index) even if the application has registered global commmands. For more reliability, actual global commands should be obtained via [Get Global Application Commands](#get-global-application-commands).
 
+## Application Recommendations Object
+
+###### Application Recommendations Structure
+
+| Field         | Type                                                                                  | Description                                                                    |
+| ------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| key           | string                                                                                | The [key of the application recommendations](#application-recommendations-key) |
+| type          | integer                                                                               | Unknown (always 4)                                                             |
+| section_title | string                                                                                | The title of the recommendation section                                        |
+| items         | array[[recommended application item](#recommended-application-item-structure) object] | The items within recommendations                                               |
+
+###### Recommended Application Item Structure
+
+| Field             | Type                                                                                                                             | Description                      |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| application       | partial [application](/resources/partial-application-structure) object                                                           | The recommended application      |
+| commands          | array[[application command](#application-command-object)]                                                                        | The commands the application has |
+| command_metadata? | map[snowflake, [recommended application item command metadata](#recommended-application-item-command-metadata-structure) object] | The command metadata             |
+
+###### Recommended Application Item Command Metadata
+
+| Field                    | Type                                                                                                             | Description                                                                     |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| commandId? ^1^           | snowflake                                                                                                        | The ID of the command that will be used instead when clicking "Send" in submenu |
+| imageOption?             | string                                                                                                           | The name of the [`ATTACHMENT`](#application-command-option-type) option         |
+| overrideSendCommandInfo? | [recommended application item command metadata](#recommended-application-item-command-metadata-structure) object | The metadata to use when clicking "Send" in submenu                             |
+| onlyAllowEdit?           | boolean                                                                                                          | Whether to pre-fill the command instead of calling it                           |
+
+^1^ Only present in `overrideSendCommandInfo`.
+
+###### Application Recommendations Key
+
+| Value            | Description          |
+| ---------------- | -------------------- |
+| contextual_image | Edit Image with Apps |
+
 ## Authorizing Your Application
 
 Application commands do not depend on a bot user in the guild; they use the [interactions](/interactions/receiving-and-responding) model. To create commands in a guild, your application must be authorized with the `applications.commands` scope.
@@ -1411,3 +1447,18 @@ Deleting or renaming a command will permanently delete all permissions for that 
 | Field       | Type                                                                                        | Description                                  |
 | ----------- | ------------------------------------------------------------------------------------------- | -------------------------------------------- |
 | permissions | array[[application command permissions](#application-command-permissions-structure) object] | The permissions for the command in the guild |
+
+<RouteHeader method="GET" url="/app-recommendations">
+  Get Application Recommendations
+</RouteHeader>
+
+Returns a list of [application recommandations](#application-recommendations-object) objects.
+
+###### Query String Params
+
+| Field          | Type      | Description                                          |
+| -------------- | --------- | ---------------------------------------------------- |
+| locale         | string    | The [locale](/reference#locales)                     |
+| channel_id?    | snowflake | The ID of the channel to retrieve recommendations in |
+| location       | string    | The [location](#application-recommendations-key)     |
+| with_commands? | boolean   | Whether to include commands and their metadata       |
