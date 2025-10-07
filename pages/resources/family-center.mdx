@@ -31,7 +31,7 @@ In line with the API, instead of referring to Family Center users as "parents" o
 | Field          | Type                                                      | Description                                        |
 | -------------- | --------------------------------------------------------- | -------------------------------------------------- |
 | linked_users   | array[[linked user](#linked-user-object) object]          | List of linked users                               |
-| teen_audit_log | [teen audit log](#teen-audit-log-object) object           | Audit log of the linked users activity             |
+| teen_audit_log | ?[teen audit log](#teen-audit-log-object) object          | Audit log of the linked users activity             |
 | users          | array[partial [user](/resources/user#user-object) object] | List of requestors the linked user is connected to |
 
 ### Linked User Object
@@ -49,27 +49,28 @@ Partial user data of an underage user linked to the requestor via [Family Center
 | requestor_id ^1^ | snowflake         | The ID of the account the linked user is connected to |
 | user_id ^1^      | snowflake         | The ID of the linked user                             |
 
-^1^ If the link type is `1`, the `user_id` and `requestor_id` will be the same. See [Link Type](#link-type) for more information.
+^1^ If the link type is [`LINKED_USER`](#link-type), the `user_id` and `requestor_id` will be the same.
 
 ###### Link Status
 
 Represents the current state of the link.
 
-| Value | Description                                                    |
-| ----- | -------------------------------------------------------------- |
-| 1     | The Family Center link request has been sent, but not accepted |
-| 2     | The linked user is currently connected to the requestor        |
-| 3     | The link has been disconnected                                 |
-| 4     | The link request was rejected                                  |
+| Value | Name     | Description                                                    |
+| ----- | -------- | -------------------------------------------------------------- |
+| 1     | PENDING  | The Family Center link request has been sent, but not accepted |
+| 2     | ACTIVE   | The linked user is currently connected to the requestor        |
+| 3     | INACTIVE | The link has been disconnected                                 |
+| 4     | DECLINED | The link request was rejected                                  |
+| 5     | EXPIRED  | The link request has expired                                   |
 
 ###### Link Type
 
 Represents what part each user played in the connection.
 
-| Value | Description                                                              |
-| ----- | ------------------------------------------------------------------------ |
-| 1     | The current user accepted the request and is the linked user of the link |
-| 2     | The current user sent the request and is the requestor of the link       |
+| Value | Name        | Description                                                              |
+| ----- | ----------- | ------------------------------------------------------------------------ |
+| 1     | LINKED_USER | The current user accepted the request and is the linked user of the link |
+| 2     | REQUESTOR   | The current user sent the request and is the requestor of the link       |
 
 ###### Example Linked User
 
@@ -101,14 +102,16 @@ Audit log of events of the linked user. Visible to both requestors and linked us
 
 ###### Teen Audit Log Structure
 
-| Field          | Type                                                      | Description                                                              |
-| -------------- | --------------------------------------------------------- | ------------------------------------------------------------------------ |
-| teen_user_id   | ?snowflake                                                | The ID of the linked user                                                |
-| range_start_id | ?snowflake                                                | A snowflake representing the start time of the current 7-day track range |
-| actions        | array[[action](#action-structure) object]                 | List of [actions](#action-structure) the linked user has done            |
-| users          | array[partial [user](/resources/user#user-object) object] | Users referenced in the audit log                                        |
-| guilds         | array[[guild](/resources/guild#guild-object) object]      | Guilds referenced in the audit log                                       |
-| totals         | map[integer, integer]                                     | Object keyed by [action types](#action-type) with their totals           |
+| Field                 | Type                                                      | Description                                                              |
+| --------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------ |
+| teen_user_id          | ?snowflake                                                | The ID of the linked user                                                |
+| range_start_id        | ?snowflake                                                | A snowflake representing the start time of the current 7-day track range |
+| actions               | array[[action](#action-structure) object]                 | List of [actions](#action-structure) the linked user has done            |
+| users                 | array[partial [user](/resources/user#user-object) object] | Users referenced in the audit log                                        |
+| guilds                | array[[guild](/resources/guild#guild-object) object]      | Guilds referenced in the audit log                                       |
+| top_user_activities?  | array[[user activity](#user-activity-object) object]      | List of top user activities                                              |
+| top_guild_activities? | array[[guild activity](#guild-activity-object) object]    | List of top guild activities                                             |
+| totals                | map[integer, integer]                                     | Object keyed by [action types](#action-type) with their totals           |
 
 ###### Action Structure
 
@@ -123,13 +126,15 @@ Audit log of events of the linked user. Visible to both requestors and linked us
 
 Represents what kind of action the linked user engaged in.
 
-| Value | Description                                                        |
-| ----- | ------------------------------------------------------------------ |
-| 1     | Users added within the last 7 days                                 |
-| 2     | Guild joined within the last 7 days                                |
-| 3     | Users messaged within the last 7 days                              |
-| 4     | Guilds the linked user has sent messages in within the last 7 days |
-| 5     | Users called within the last 7 days                                |
+| Value | Name                | Description                                                                        |
+| ----- | ------------------- | ---------------------------------------------------------------------------------- |
+| 1     | USER_ADD            | Users added within the last 7 days                                                 |
+| 2     | GUILD_ADD           | Guild joined within the last 7 days                                                |
+| 3     | USER_INTERACTION    | Users messaged within the last 7 days                                              |
+| 4     | GUILD_INTERACTION   | Guilds the linked user has sent messages in within the last 7 days                 |
+| 5     | USER_CALLED         | Users called within the last 7 days                                                |
+| 6     | TOTAL_VOICE_MINUTES | Duration in minutes how many the linked user spent in calls within the last 7 days |
+| 7     | PURCHASES           | Purchases made within the last 7 days                                              |
 
 ###### Example Teen Audit Log
 
@@ -166,7 +171,10 @@ Represents what kind of action the linked user engaged in.
     "1": 0,
     "2": 0,
     "3": 1,
-    "4": 0
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0
   }
 }
 ```
