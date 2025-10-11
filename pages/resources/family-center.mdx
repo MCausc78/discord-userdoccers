@@ -106,12 +106,14 @@ Audit log of events of the linked user. Visible to both requestors and linked us
 | --------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------ |
 | teen_user_id          | ?snowflake                                                | The ID of the linked user                                                |
 | range_start_id        | ?snowflake                                                | A snowflake representing the start time of the current 7-day track range |
-| actions               | array[[action](#action-structure) object]                 | List of [actions](#action-structure) the linked user has done            |
-| users                 | array[partial [user](/resources/user#user-object) object] | Users referenced in the audit log                                        |
-| guilds                | array[[guild](/resources/guild#guild-object) object]      | Guilds referenced in the audit log                                       |
-| top_user_activities?  | array[[user activity](#user-activity-object) object]      | List of top user activities                                              |
-| top_guild_activities? | array[[guild activity](#guild-activity-object) object]    | List of top guild activities                                             |
-| totals                | map[integer, integer]                                     | Object keyed by [action types](#action-type) with their totals           |
+| totals?               | map[integer, integer]                                     | Object keyed by [action types](#action-type) with their totals           |
+| actions?              | array[[action](#action-structure) object]                 | List of [actions](#action-structure) the linked user has done            |
+| users?                | array[partial [user](/resources/user#user-object) object] | Users referenced in the audit log                                        |
+| guilds?               | array[[guild](/resources/guild#guild-object) object]      | Guilds referenced in the audit log                                       |
+| top_user_activities?  | array[[user activity](#user-activity-structure) object]   | List of top user activities                                              |
+| top_guild_activities? | array[[guild activity](#guild-activity-structure) object] | List of top guild activities                                             |
+| total_spend?          | [total spend](#total-spend-structure) object              | Total amount spent                                                       |
+| invoices?             | array[[invoice](#invoice-structure) object]               | List of invoices the linked users made                                   |
 
 ###### Action Structure
 
@@ -135,6 +137,43 @@ Represents what kind of action the linked user engaged in.
 | 5     | USER_CALLED         | Users called within the last 7 days                                                |
 | 6     | TOTAL_VOICE_MINUTES | Duration in minutes how many the linked user spent in calls within the last 7 days |
 | 7     | PURCHASES           | Purchases made within the last 7 days                                              |
+
+###### User Activity Structure
+
+| Field      | Type      | Description                                                           |
+| ---------- | --------- | --------------------------------------------------------------------- |
+| user_id    | snowflake | The ID of the user                                                    |
+| dms_sent   | integer   | The amount of messages the linked users sent privately to other users |
+| call_count | integer   | The amount of calls the linked users have made                        |
+
+###### Guild Activity Structure
+
+| Field         | Type      | Description                                 |
+| ------------- | --------- | ------------------------------------------- |
+| guild_id      | snowflake | The ID of the guild                         |
+| messages_sent | integer   | The amount of messages sent by linked users |
+
+###### Total Spend Structure
+
+| Field          | Type                                                  | Description                                                                                        |
+| -------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| amount         | integer                                               | ...                                                                                                |
+| currency       | string                                                | The lower-cased [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code the invoice is in |
+
+###### Invoice Structure
+
+| Field          | Type                                                  | Description                                                                                        |
+| -------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| invoice_items? | array[[invoice item](#invoice-item-structure) object] | ...                                                                                                |
+| total          | integer                                               | ...                                                                                                |
+| currency       | string                                                | The lower-cased [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code the invoice is in |
+
+###### Invoice Item Structure
+
+| Field                 | Type      | Description                                     |
+| --------------------- | --------- | ----------------------------------------------- |
+| sku_id?               | snowflake | The ID of the SKU                               |
+| subscription_plan_id? | snowflake | The ID of the subscription plan the SKU was for |
 
 ###### Example Teen Audit Log
 
