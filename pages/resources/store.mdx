@@ -6,7 +6,18 @@
 
 All fields marked as `string | map[string, string]` may represent possibly localized string.
 For maps, the key is [locale](/reference#locales) and the value is localized string.
-A string field is considered as not localized.
+A string field is considered as localized string.
+
+### Localizable String Object
+
+This object is send-only.
+
+###### Localizable String Structure
+
+| Field          | Type                | Description                                       |
+| -------------- | ------------------- | ------------------------------------------------- |
+| default        | string              | The default string                                |
+| localizations? | map[string, string] | The strings for each [locale](/reference#locales) |
 
 ### Store Listing Object
 
@@ -51,16 +62,6 @@ A string field is considered as not localized.
 | ------- | -------------------------------------------------------------- | --------------------------- |
 | content | string                                                         | The note content            |
 | user    | ?partial [user](/resources/user#partial-user-structure) object | The user who wrote the note |
-
-###### Store Asset Structure
-
-| Field     | Type      | Description                       |
-| --------- | --------- | --------------------------------- |
-| id        | snowflake | The ID of the asset               |
-| size      | integer   | The asset's size in bytes         |
-| width     | integer   | The width of the asset in pixels  |
-| height    | integer   | The height of the asset in pixels |
-| mime_type | string    | The asset's MIME type             |
 
 ###### Carousel Item Structure
 
@@ -426,6 +427,112 @@ Private SKUs are superset of [base SKUs](#base-sku-object), and have additional 
 | amount     | integer | The price of the SKU        |
 | percentage | integer | The percentage of the price |
 
+### Store Asset Object
+
+###### Store Asset Structure
+
+| Field     | Type      | Description                       |
+| --------- | --------- | --------------------------------- |
+| id        | snowflake | The ID of the asset               |
+| size      | integer   | The asset's size in bytes         |
+| width     | integer   | The width of the asset in pixels  |
+| height    | integer   | The height of the asset in pixels |
+| mime_type | string    | The asset's MIME type             |
+
 ## Endpoints
 
-...
+<RouteHeader method="POST" url="/store/skus">
+  Create SKU
+</RouteHeader>
+
+Creates a SKU for the specified application. Returns a [private SKU](#private-sku-object) object on success.
+
+###### JSON Params
+
+| Field                | Type                                                                       | Description                                                                       |
+| -------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| type                 | integer                                                                    | The [type](#sku-type) of SKU                                                      |
+| name                 | string \| [localizable string](#localizable-string-object) object          | The name of the SKU                                                               |
+| application_id       | snowflake                                                                  | The ID of the application to create SKU for                                       |
+| legal_notice?        | string \| [localizable string](#localizable-string-object) object          | The legal notice for the SKU                                                      |
+| price_tier?          | integer                                                                    | The price tier of the SKU (in USD)                                                |
+| price?               | map[string, integer]                                                       | The price overrides for specific currencies                                       |
+| sale_price_tier?     | integer                                                                    | The sale price tier of the SKU (in USD)                                           |
+| sale_price?          | map[string, integer]                                                       | The sale price overrides for specific currencies                                  |
+| dependent_sku_id?    | snowflake                                                                  | The ID of the SKU that this SKU is dependent on                                   |
+| access_level?        | integer                                                                    | The [access level](#sku-access-level) of the SKU                                  |
+| locales?             | array[string]                                                              | The [locales](/references#locale) that the SKU is available in                    |
+| features             | array[integer]                                                             | The [features](#sku-feature) that the SKU has                                     |
+| genres?              | array[integer]                                                             | The [genres](#sku-genre) that apply to this SKU                                   |
+| content_ratings?     | map[integer, [content rating](#content-rating-structure) object]           | The content ratings of the SKU for each [agency](#content-rating-agency)          |
+| system_requirements? | map[integer, [system requirements](#system-requirements-structure) object] | The system requirements of the SKU for each [operating system](#operating-system) |
+| release_date?        | ?ISO8601 date                                                              | The date that the SKU will released                                               |
+| bundled_skus?        | array[snowflake]                                                           | The IDs of SKUs bundled with this SKU                                             |
+| manifest_labels?     | array[snowflake]                                                           | The manifest label IDs that this SKU is associated with                           |
+
+<RouteHeader method="GET" url="/store/applications/{application.id}/assets">
+  Get Application Store Assets
+</RouteHeader>
+
+Returns a list of [store asset](#store-asset-object) objects for the given application ID.
+
+<RouteHeader method="POST" url="/store/applications/{application.id}/assets">
+  Create Application Store Asset
+</RouteHeader>
+
+Creates a store asset for the given the application ID. Returns a [store asset](#store-asset-object) object on success.
+
+###### Form Params
+
+| Field  | Type          | Description         |
+| ------ | ------------- | ------------------- |
+| assets | file contents | The asset to upload |
+
+<RouteHeader method="DELETE" url="/store/applications/{application.id}/assets/{asset.id}">
+  Delete Application Store Asset
+</RouteHeader>
+
+Deletes a store asset for the given the application ID. Returns a 204 empty response on success.
+
+<RouteHeader method="GET" url="/store/listings/{listing_id}">
+  Get Store Listing
+</RouteHeader>
+
+Returns a private [store listing](#store-listing-object) object for the given listing ID.
+
+###### Query String Params
+
+| Field              | Type      | Description                                                         |
+| ------------------ | --------- | ------------------------------------------------------------------- |
+| country_code?      | string    | The user's billing country code                                     |
+| payment_source_id? | snowflake | The ID of the payment source                                        |
+| localize?          | boolean   | Whether to localize the store listings to the current user's locale |
+
+<RouteHeader method="GET" url="/store/published-listings/{sku.id}">
+  Get Store Listing by SKU
+</RouteHeader>
+
+Returns a public [store listing](#store-listing-object) object by the given SKU ID.
+
+###### Query String Params
+
+| Field              | Type      | Description                                                         |
+| ------------------ | --------- | ------------------------------------------------------------------- |
+| country_code?      | string    | The user's billing country code                                     |
+| payment_source_id? | snowflake | The ID of the payment source                                        |
+| localize?          | boolean   | Whether to localize the store listings to the current user's locale |
+
+<RouteHeader method="GET" url="/store/skus/{sku.id}/listings">
+  Get SKU Store Listings
+</RouteHeader>
+
+Returns a list of public [store listing](#store-listing-object) objects by the given SKU ID.
+
+###### Query String Params
+
+| Field              | Type      | Description                                                         |
+| ------------------ | --------- | ------------------------------------------------------------------- |
+| country_code?      | string    | The user's billing country code                                     |
+| payment_source_id? | snowflake | The ID of the payment source                                        |
+| localize?          | boolean   | Whether to localize the store listings to the current user's locale |
+
