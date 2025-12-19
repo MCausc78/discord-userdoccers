@@ -219,6 +219,209 @@ The values of this enum are currently unknown. Help us by figuring them out and 
 }
 ```
 
+### Billing Order Object
+
+###### Billing Order Structure
+
+| Field                  | Type                                                                        | Description                                                          |
+| ---------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| id                     | snowflake                                                                   | The ID of the order                                                  |
+| user_id                | snowflake                                                                   | The ID of the user the order belongs to                              |
+| status                 | integer                                                                     | The [status of order](#billing-order-status)                         |
+| created_at             | ISO8601 timestamp                                                           | When the order was created                                           |
+| updated_at             | ISO8601 timestamp                                                           | When the order was updated                                           |
+| revision?              | integer                                                                     | The revision of order                                                |
+| order_line_items       | array[[billing order line item](#billing-order-line-item-structure) object] | The items being purchased                                            |
+| billing_facet          | [billing facet](#billing-facet-structure) object                            | The billing facet of the order                                       |
+| gifting_facet?         | [gifting facet](#gifting-facet-structure) object                            | The facet of the order related to gift purchases                     |
+| location_facet?        | [billing location facet](#billing-location-facet-structure) object          | The facet of the order related to location                           |
+| experimentation_facet? | [experimentation facet](#experimentation-facet-structure)                   | The facet of the order related to experiments                        |
+| errors?                | array[integer]                                                              | The [errors happened during signing](#billing-order-sign-error-type) |
+
+###### Billing Order Status
+
+| Value | Name                | Description                       |
+| ----- | ------------------- | --------------------------------- |
+| 0     | UNSPECIFIED         | Unknown                           |
+| 1     | DRAFT               | The order is draft                |
+| 2     | SIGNED              | The order is signed               |
+| 3     | DISCARDED           | The order is discarded            |
+| 4     | SIGNING_IN_PROGRESS | The order is pending to be signed |
+
+###### Billing Order Sign Error Type
+
+| Value | Name                    | Description                                                                                               |
+| ----- | ----------------------- | --------------------------------------------------------------------------------------------------------- |
+| 1000  | REQUIRES_AUTHENTICATION | The order requires additional authentication via [Stripe 3DS](https://docs.stripe.com/payments/3d-secure) |
+| 1001  | REQUIRES_REDIRECTION    | The order requires redirection to complete the payment                                                    |
+
+###### Billing Order Line Item Structure
+
+| Field                 | Type       | Description                                                    |
+| --------------------- | ---------- | -------------------------------------------------------------- |
+| id ^1^                | snowflake  | The ID of the line item                                        |
+| sku_id                | snowflake  | The ID of the SKU                                              |
+| subscription_plan_id? | ?snowflake | The ID of the subscription plan the item represents            |
+| purchase_type         | integer    | The [type of purchase](#billing-order-line-item-purchase-type) |
+| quantity              | integer    | How many of the item have been/are being purchased             |
+
+^1^ This field is received only and cannot be set.
+
+###### Billing Order Line Item Purchase Type
+
+| Value | Name         | Description           |
+| ----- | ------------ | --------------------- |
+| 0     | UNSPECIFIED  | Unknown               |
+| 1     | ONE_TIME     | One time purchase     |
+| 2     | SUBSCRIPTION | Subscription purchase |
+
+###### Billing Facet Structure
+
+| Field                               | Type                                                                                                | Description                                               |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| payment_source_id                   | snowflake                                                                                           | The ID of the payment source                              |
+| payment_gateway?                    | integer                                                                                             | The [payment gateway of payment source](#payment-gateway) |
+| invoice_preview? ^1^                | [billing order invoice preview](#billing-order-invoice-preview-structure) object                    | The order invoice preview                                 |
+| order_signing_deferral_context? ^1^ | ?[billing order signing deferral context](#billing-order-signing-deferral-context-structure) object | The deferral context of order signing                     |
+
+^1^ This field is received only and cannot be set.
+
+###### Billing Order Invoice Preview Structure
+
+| Field      | Type                                                                              | Description                                                                                        |
+| ---------- | --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| line_items | array[[billing order invoice item](#billing-order-invoice-item-structure) object] | The items in the invoice                                                                           |
+| subtotal   | integer                                                                           | The subtotal of the invoice                                                                        |
+| tax        | integer                                                                           | The tax applied to the invoice                                                                     |
+| total      | integer                                                                           | The total of the invoice                                                                           |
+| currency   | string                                                                            | The lower-cased [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code the invoice is in |
+
+###### Billing Order Invoice Item Structure
+
+| Field                  | Type      | Description                                                                            |
+| ---------------------- | --------- | -------------------------------------------------------------------------------------- |
+| ref_order_line_item_id | snowflake | The reference ID to the line item within [billing order](#billing-order-object) object |
+| unit_price             | integer   | The unit price of the item                                                             |
+| quantity               | integer   | How many of the item have been/are being purchased                                     |
+
+###### Billing Order Signing Deferral Context Structure
+
+| Field                     | Type                                                                                         | Description                  |
+| ------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------- |
+| payment_redirect_context? | ?[billing order payment redirect context](#billing-order-payment-redirect-context-structure) | The payment redirect context |
+
+###### Billing Order Payment Redirect Context Structure
+
+| Field         | Type    | Description              |
+| ------------- | ------- | ------------------------ |
+| redirect_url? | ?string | The payment redirect URL |
+
+###### Gifting Facet Structure
+
+| Field                | Type                                                                        | Description                            |
+| -------------------- | --------------------------------------------------------------------------- | -------------------------------------- |
+| is_gift?             | ?boolean                                                                    | Whether the billing order is a gift    |
+| gift_customization?  | ?[gift customization options](#gift-customization-options-structure) object | Additional metadata for gift purchases |                                                                         |
+
+###### Gift Customization Options Structure
+
+| Field                    | Type             | Description                                                                                            |
+| ------------------------ | ---------------- | ------------------------------------------------------------------------------------------------------ |
+| gift_style?              | ?integer         | The [style of the gift code](/resources/entitlement#gift-style)                                        |
+| recipient_id?            | snowflake        | The ID of the user to directly send the gift to                                                        |
+| custom_message_contents? | ?string          | A custom message to include with the gift (max 190 characters)                                         |
+| reward_sku_ids?          | array[snowflake] | The IDs of the promotional SKUs the gifter chooses to redeem as a reward for purchasing a gift (max 1) |
+| sound_id?                | ?snowflake       | The ID of the default soundboard sound to play with the gift                                           |
+| emoji_id?                | ?snowflake       | The ID of a guild's custom emoji                                                                       |
+| emoji_name?              | ?string          | The unicode character of the emoji                                                                     |
+
+###### Billing Location Facet Structure
+
+| Field                            | Type    | Description                                                                                                                       |
+| -------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| request_gateway_country_code     | ?string | The [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code of country of last request that updated the order |
+| billing_address_country_code ^1^ | ?string | The [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code of country of payment source's billing address    |
+| request_ip_address ^1^           | ?string | Last IP address of request that updated the order                                                                                 |
+| determined_country_code ^1^      | ?string | The [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code of country where the payment is likely happening  |
+
+^1^ This field is received only and cannot be set.
+
+###### Experimentation Facet Structure
+
+| Field                  | Type                                                                                | Description                                                 |
+| ---------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| experiment_assignments | array[[facet experiment assignment](#facet-experiment-assignment-structure) object] | The assignments for certain experiments for requesting user |
+
+###### Facet Experiment Assignment Structure
+
+| Field             | Type    | Description                                                                                         |
+| ----------------- | ------- | --------------------------------------------------------------------------------------------------- |
+| experiment_name   | string  | A human-readable experiment name (formatted as `year-month_name`), prioritized over the client name |
+| bucket_assignment | integer | The requesting user's assigned experiment bucket                                                    |
+
+###### Example Billing Order
+
+```json
+{
+    "id": "1393278033053483292",
+    "user_id": "1001086404203389018",
+    "status": 1,
+    "created_at": "2025-07-11T17:09:28.938417+00:00",
+    "updated_at": "2025-07-11T17:09:28.938419+00:00",
+    "revision": 0,
+    "order_line_items": [
+        {
+            "id": "1393278033053483291",
+            "sku_id": "1387888352501567518",
+            "subscription_plan_id": null,
+            "purchase_type": 2,
+            "quantity": 1
+        }
+    ],
+    "billing_facet": {
+        "payment_source_id": "1422548914485198869",
+        "payment_gateway": 0,
+        "invoice_preview": {
+            "line_items": [
+                {
+                    "ref_order_line_item_id": "1393278033053483291",
+                    "unit_price": 1099,
+                    "quantity": 1
+                }
+            ],
+            "subtotal": 1099,
+            "tax": 0,
+            "total": 0,
+            "currency": "eur"
+        },
+        "order_signing_deferral_context": null
+    },
+    "gifting_facet": {
+        "is_gift": null,
+        "gift_customization": null
+    },
+    "location_facet": {
+        "request_gateway_country_code": null,
+        "billing_address_country_code": "US",
+        "request_ip_address": "162.159.137.232",
+        "determined_country_code": "US"
+    },
+    "experimentation_facet": {
+        "experiment_assignments": [
+            {
+                "experiment_name": "2025-10-seasonal-gifting-2025",
+                "bucket_assignment": 0
+            },
+            {
+                "experiment_name": "2025-08-mobile-gift-orders",
+                "bucket_assignment": 1
+            }
+        ]
+    },
+    "errors": []
+}
+```
+
 ### Endpoints
 
 <RouteHeader method="GET" url="/users/@me/billing/country-code">
@@ -539,3 +742,63 @@ Returns whether the client should prompt the user to continue their premium purc
 </RouteHeader>
 
 Returns a list of up to 3 partial [user](/resources/user#partial-user-structure) objects representing friends with a premium subscription, used to entice the user to subscribe.
+
+<RouteHeader method="GET" url="/billing/orders/{billing_order.id}">
+  Get Billing Order
+</RouteHeader>
+
+Returns a [billing order](#billing-order-object) for the given order ID.
+
+<RouteHeader method="POST" url="/billing/orders">
+  Create Billing Order
+</RouteHeader>
+
+Creates a billing order. Returns a [billing order](#billing-order-object) on success.
+
+###### JSON Params
+
+| Field            | Type                                                                        | Description                                                          |
+| ---------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| order_line_items | array[[billing order line item](#billing-order-line-item-structure) object] | The items being purchased                                            |
+| billing_facet    | [billing facet](#billing-facet-structure) object                            | The billing facet of the order                                       |
+| gifting_facet?   | [gifting facet](#gifting-facet-structure) object                            | The facet of the order related to gift purchases                     |
+| location_facet?  | [billing location facet](#billing-location-facet-structure) object          | The facet of the order related to location                           |
+
+<RouteHeader method="GET" url="/billing/orders">
+  Get Billing Orders
+</RouteHeader>
+
+Returns a list of [billing order](#billing-order-object) objects.
+
+<RouteHeader method="PATCH" url="/billing/orders/{billing_order.id}/line-items/{billing_order_line_item.id}">
+  Modify Billing Order Line Item
+</RouteHeader>
+
+Modifies an line item in a billing order. Returns a [billing order](#billing-order-object) object on success.
+
+###### JSON Params
+
+| Field                 | Type       | Description                                               |
+| --------------------- | ---------- | --------------------------------------------------------- |
+| subscription_plan_id? | ?snowflake | The ID of the subscription plan the item should represent |
+| quantity?             | integer    | How many of the item have been/are being purchased        |
+
+<RouteHeader method="PATCH" url="/billing/orders/{billing_order.id}">
+  Modify Billing Order
+</RouteHeader>
+
+Modifies a billing order. Returns a [billing order](#billing-order-object) object on success.
+
+###### JSON Params
+
+| Field           | Type                                                               | Description                                      |
+| --------------- | ------------------------------------------------------------------ | ------------------------------------------------ |
+| billing_facet?  | [billing facet](#billing-facet-structure) object                   | The billing facet of the order                   |
+| gifting_facet?  | [gifting facet](#gifting-facet-structure) object                   | The facet of the order related to gift purchases |
+| location_facet? | [billing location facet](#billing-location-facet-structure) object | The facet of the order related to location       |
+
+<RouteHeader method="POST" url="/billing/orders/{billing_order.id}/sign">
+  Sign Billing Order
+</RouteHeader>
+
+Signs a billing order. Returns an updated [billing order](#billing-order-object) object on success.
