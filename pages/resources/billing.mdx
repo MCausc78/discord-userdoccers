@@ -321,7 +321,7 @@ The values of this enum are currently unknown. Help us by figuring them out and 
 | Field                | Type                                                                        | Description                            |
 | -------------------- | --------------------------------------------------------------------------- | -------------------------------------- |
 | is_gift?             | ?boolean                                                                    | Whether the billing order is a gift    |
-| gift_customization?  | ?[gift customization options](#gift-customization-options-structure) object | Additional metadata for gift purchases |                                                                         |
+| gift_customization?  | ?[gift customization options](#gift-customization-options-structure) object | Additional metadata for gift purchases |
 
 ###### Gift Customization Options Structure
 
@@ -802,3 +802,9 @@ Modifies a billing order. Returns a [billing order](#billing-order-object) objec
 </RouteHeader>
 
 Signs a billing order. Returns an updated [billing order](#billing-order-object) object on success.
+
+<RouteHeader method="POST" url="/billing/orders/{billing_order.id}/discard">
+  Discard Billing Order
+</RouteHeader>
+
+Discards a billing order. Returns an updated [billing order](#billing-order-object) object on success.
