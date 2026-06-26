@@ -1037,6 +1037,9 @@ These events directly correspond with a specific action or state change that has
 | [Guild Role Create](#guild-role-create)                                                           | Guild role was created                                                                            |
 | [Guild Role Update](#guild-role-update)                                                           | Guild role was updated                                                                            |
 | [Guild Role Delete](#guild-role-delete)                                                           | Guild role was deleted                                                                            |
+| [Guild Room Connect](#guild-room-connect)                                                         | User connected to a guild room                                                                    |
+| [Guild Room Disconnect](#guild-room-disconnect)                                                   | User disconnected from a guild room                                                               |
+| [Guild Room Update](#guild-room-update)                                                           | Guild room was updated                                                                            |
 | [Guild Scheduled Event Create](#guild-scheduled-event-create)                                     | Guild scheduled event was created                                                                 |
 | [Guild Scheduled Event Update](#guild-scheduled-event-update)                                     | Guild scheduled event was updated                                                                 |
 | [Guild Scheduled Event Delete](#guild-scheduled-event-delete)                                     | Guild scheduled event was deleted                                                                 |
@@ -1051,6 +1054,9 @@ These events directly correspond with a specific action or state change that has
 | [Guild Soundboard Sound Delete](#guild-soundboard-sound-delete)                                   | Guild soundboard sound was deleted                                                                |
 | [Soundboard Sounds](#soundboard-sounds)                                                           | Response to [Request Soundboard Sounds](#request-soundboard-sounds)                               |
 | [Guild Integrations Update](#guild-integrations-update)                                           | Guild integration was updated                                                                     |
+| [Haven Connect](#haven-connect)                                                                   | User connected to a haven                                                                         |
+| [Haven Disconnect](#haven-disconnect)                                                             | User disconnected from a haven                                                                    |
+| [Haven Update](#haven-update)                                                                     | Haven was updated                                                                                 |
 | [Integration Create](#integration-create)                                                         | Guild integration was created                                                                     |
 | [Integration Update](#integration-update)                                                         | Guild integration was updated                                                                     |
 | [Integration Delete](#integration-delete)                                                         | Guild integration was deleted                                                                     |
@@ -2524,6 +2530,27 @@ Sent when a guild role is deleted.
 | -------- | --------- | ------------------- |
 | guild_id | snowflake | The ID of the guild |
 | role_id  | snowflake | The ID of the role  |
+ 
+### Guild Rooms
+
+#### Guild Room Connect
+
+Sent when the current user connects to a guild room. The inner payload is a [guild room](/resources/guild#guild-room-object) object.
+
+#### Guild Room Disconnect
+
+Sent when the current user disconnects from a haven.
+
+###### Guild Room Disconnect Structure
+
+| Field   | Type      | Description                      |
+| ------- | --------- | -------------------------------- |
+| user_id | snowflake | The ID of the user               |
+| room_id | snowflake | The ID of the room voice channel |
+
+#### Guild Room Update
+
+Sent when a guild room is updated. The inner payload is a [guild room](/resources/guild#guild-room-object) object.
 
 ### Guild Scheduled Events
 
@@ -2607,6 +2634,27 @@ Sent in response to [Request Soundboard Sounds](#request-soundboard-sounds).
 | ----------------- | ------------------------------------------------------------------------------- | ------------------------------ |
 | guild_id          | snowflake                                                                       | The ID of the source guild     |
 | soundboard_sounds | array[[soundboard sound](/resources/soundboard#soundboard-sound-object) object] | Custom guild soundboard sounds |
+
+### Havens
+
+#### Haven Connect
+
+Sent when the current user connects to a haven. The inner payload is a [haven](/resources/haven#haven-object) object.
+
+#### Haven Disconnect
+
+Sent when the current user disconnects from a haven.
+
+###### Haven Disconnect Structure
+
+| Field   | Type      | Description                       |
+| ------- | --------- | --------------------------------- |
+| user_id | snowflake | The ID of the user                |
+| room_id | snowflake | The ID of the haven voice channel |
+
+#### Haven Update
+
+Sent when a haven is updated. The inner payload is a [haven](/resources/haven#haven-object) object.
 
 ### Integrations
 

@@ -1924,6 +1924,32 @@ Represents a member's premium guild subscription ([boost](https://support.discor
 | APPROVED        | The application is approved |
 | ACTION_REQUIRED | Action required             |
 
+### Guild Room Object
+
+###### Guild Room Structure
+
+| Field       | Type                                                        | Description           |
+| ----------- | ----------------------------------------------------------- | --------------------- |
+| room_id     | snowflake                                                   | The ID of the room    |
+| users       | array[[guild room user](#guild-room-user-structure) object] | The users in the room |
+| background? | ?integer                                                    | Unknown               |
+
+###### Guild Room User Structure
+
+| Field        | Type                                                                   | Description                          |
+| ------------ | ---------------------------------------------------------------------- | ------------------------------------ |
+| user_id      | snowflake                                                              | The ID of the user                   |
+| position?    | [guild room user position](#guild-room-user-position-structure) object | The position of the user in the room |
+| status_id?   | ???                                                                    | ???                                  |
+| status_text? | ???                                                                    | ???                                  |
+
+###### Guild Room User Position Structure
+
+| Field | Type  | Description          |
+| ----- | ----- | -------------------- |
+| x     | float | X coordinate (0-100) |
+| y     | float | Y coordinate (0-100) |
+
 ## Endpoints
 
 <RouteHeader method="GET" url="/users/@me/guilds" supportsOAuth2="guilds" supportsBot>
@@ -4053,3 +4079,36 @@ Returns a URL to the attachment for the given guild and product ID. Requires an 
 | Field | Type   | Description               |
 | ----- | ------ | ------------------------- |
 | url   | string | The URL to the attachment |
+
+<RouteHeader method="POST" url="/guilds/{guild.id}/rooms/{channel.id}/connect">
+  Connect to Guild Room
+</RouteHeader>
+
+Connects to the guild room. Returns the updated [guild room](#guild-room-object) object on success.
+
+###### JSON Params
+
+| Field    | Type                                                                   | Description  |
+| -------- | ---------------------------------------------------------------------- | ------------ |
+| position | [guild room user position](#guild-room-user-position-structure) object | The position |
+
+<RouteHeader method="POST" url="/guilds/{guild.id}/rooms/{channel.id}/disconnect">
+  Disconnect from Guild Room
+</RouteHeader>
+
+Disconnects from the guild room. Returns a 204 empty response on success.
+
+<RouteHeader method="POST" url="/guilds/{guild.id}/rooms/{channel.id}/update">
+  Modify Guild Room
+</RouteHeader>
+
+Modifies the guild room. Returns the updated [guild room](#guild-room-object) object on success.
+
+###### JSON Params
+
+| Field             | Type                                                                   | Description                                      |
+| ----------------- | ---------------------------------------------------------------------- | ------------------------------------------------ |
+| background?       | integer                                                                | The ID of the background (0-100) ???             |
+| user_position?    | [guild room user position](#guild-room-user-position-structure) object | The position of the user in the room             |
+| user_status_id?   | integer                                                                | The ID of the user status (0-100)                |
+| user_status_text? | string                                                                 | The text of the user status (max 512 characters) |

@@ -1,0 +1,167 @@
+# Haven
+
+### Haven Object
+
+###### Haven Structure
+
+| Field        | Type                                                            | Description                   |
+| ------------ | --------------------------------------------------------------- | ----------------------------- |
+| room_id      | snowflake                                                       | The ID of the voice channel   |
+| participants | array[[haven participant](#haven-participant-structure) object] | The participants in the haven |
+| seats        | array[[haven seat](#haven-seat-structure) object]               | The seats in the haven        |
+
+###### Haven Participant Structure
+
+| Field    | Type                                                                       | Description                                          |
+| -------- | -------------------------------------------------------------------------- | ---------------------------------------------------- |
+| user_id  | snowflake                                                                  | The ID of the user                                   |
+| position | [haven participant position](#haven-participant-position-structure) object | The position of the user in the haven                |
+| avatar   | integer                                                                    | The [type of haven character](#haven-character-type) |
+
+###### Haven Participant Position Structure
+
+| Field | Type    | Description               |
+| ----- | ------- | ------------------------- |
+| x     | integer | X coordinate (-5000-5000) |
+| y     | integer | Y coordinate (-5000-5000) |
+
+###### Haven Seat Structure
+
+| Field      | Type      | Description                    |
+| ---------- | --------- | ------------------------------ |
+| id         | integer   | The ID of the haven seat (0-6) |
+| claimed_by | snowflake | The ID of the user on the seat |
+
+###### Haven Character Type
+
+| Value | Name           | Description    |
+| ----- | -------------- | -------------- |
+| 0     | NONE           | None           |
+| 1     | GOLDFISH       | Goldfish       |
+| 2     | GOLDFISH_BLUE  | Blue goldfish  |
+| 3     | GOLDFISH_PINK  | Pink goldfish  |
+| 4     | POPCORN        | Popcorn        |
+| 5     | POPCORN_PURPLE | Purple popcorn |
+| 6     | POPCORN_BLUE   | Blue popcorn   |
+| 7     | IMP            | Imp            |
+| 8     | IMP_BLUE       | Blue imp       |
+| 9     | IMP_PINK       | Pink imp       |
+
+## Endpoints
+
+<RouteHeader method="POST" url="/haven/{channel.id}/connect">
+  Connect to Haven
+</RouteHeader>
+
+Connects the current user to the voice channel's haven. Returns a [haven](#haven-object) object.
+
+<RouteHeader method="POST" url="/haven/{channel.id}/disconnect">
+  Disconnect from Haven
+</RouteHeader>
+
+Disconnects the current user from the voice channel's haven. Returns a 204 empty response.
+
+<RouteHeader method="POST" url="/haven/{channel.id}/update">
+  Modify Haven
+</RouteHeader>
+
+Modifies the haven. Returns the updated [haven](#haven-object) object.
+
+###### JSON Params
+
+| Field     | Type                                                                       | Description                                          |
+| --------- | -------------------------------------------------------------------------- | ---------------------------------------------------- |
+| position? | [haven participant position](#haven-participant-position-structure) object | The position of the current user in the haven        |
+| avatar?   | integer                                                                    | The [type of haven character](#haven-character-type) |
+| seat?     | integer                                                                    | The ID of the haven seat (0-6)                       |
+
+<RouteHeader method="GET" url="/haven/assets">
+  Get Haven Assets
+</RouteHeader>
+
+Returns the haven assets.
+
+###### Response Body
+
+| Field       | Type                                                                            | Description                                                               |
+| ----------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| sounds?     | map[integer, string]                                                            | A mapping of [haven genre](#haven-genre) to relevant sound URL            |
+| genres?     | map[integer, [haven genre assets](#haven-genre-assets-structure) object]        | A mapping of [haven genre](#haven-genre) to their assets                  |
+| characters? | map[string, [haven character assets](#haven-character-assets-structure) object] | A mapping of [haven characters](#haven-character-type-string)             |
+| backgrounds | [haven background assets](#haven-background-assets-structure) object            | The background haven assets                                               |
+| ambience    | [haven ambience assets](#haven-background-assets-structure) object              | The ambience haven assets                                                 |
+| clouds      | map[string, string]                                                             | A mapping of cloud IDs to the cloud URLs                                  |
+| seats       | map[string, [haven seat asset](#haven-seat-asset-structure) object]             | A mapping of seat asset keys to their detailed information                |
+| misc        | map[string, string]                                                             | A mapping of [miscellaneous asset keys](#haven-asset-key) to their assets |
+
+###### Haven Background Assets Structure
+
+| Field     | Type                                                                  | Description     |
+| --------- | --------------------------------------------------------------------- | --------------- |
+| sky       | [asset config](/resources/collectibles#asset-config-structure) object | Sky asset       |
+| mountains | [asset config](/resources/collectibles#asset-config-structure) object | Mountains asset |
+| river     | [asset config](/resources/collectibles#asset-config-structure) object | River asset     |
+| camp      | [asset config](/resources/collectibles#asset-config-structure) object | Camp asset      |
+
+###### Haven Ambience Assets Structure
+
+| Field         | Type                                                                  | Description          |
+| ------------- | --------------------------------------------------------------------- | -------------------- |
+| river         | [asset config](/resources/collectibles#asset-config-structure) object | Ambience river asset |
+| fire          | [asset config](/resources/collectibles#asset-config-structure) object | Fire asset           |
+| fireflies     | [asset config](/resources/collectibles#asset-config-structure) object | Fireflies asset      |
+| foliage_front | [asset config](/resources/collectibles#asset-config-structure) object | Foliage front asset  |
+
+###### Haven Genre Assets Structure
+
+| Field     | Type   | Description                          |
+| --------- | ------ | ------------------------------------ |
+| thumbnail | string | The URL to the haven genre thumbnail |
+
+###### Haven Character Assets Structure
+
+| Field         | Type          | Description                   |
+| ------------- | ------------- | ----------------------------- |
+| decoration?   | array[string] | The URLs to the decoration    |
+| headTurn?     | array[string] | The URLs to turn head on      |
+| headTurnBack? | array[string] | The URLs to turn head back on |
+
+###### Haven Seat Asset Structure
+
+| Field  | Type   | Description                      |
+| ------ | ------ | -------------------------------- |
+| seat   | string | The URL to the seat image        |
+| shadow | string | The URL to the seat shadow image |
+
+###### Haven Asset Key
+
+| Value     | Description |
+| --------- | ----------- |
+| cooler    | Cooler      |
+| chair     | Chair       |
+| leftRock  | Left rock   |
+| logLeft   | Log left    |
+| logRight  | Log right   |
+| rightRock | Right rock  |
+
+###### Haven Genre
+
+| Value  | Description  |
+| ------ | ------------ |
+| sleepy | Sleepy haven |
+| chill  | Chilling     |
+| jazzy  | Jazzy haven  |
+
+###### Haven Character Type String
+
+| Value         | Description    |
+| ------------- | -------------- |
+| goldfish      | Goldfish       |
+| goldfishBlue  | Blue goldfish  |
+| goldfishPink  | Pink goldfish  |
+| popcorn       | Popcorn        |
+| popcornPurple | Purple popcorn |
+| popcornBlue   | Blue popcorn   |
+| imp           | Imp            |
+| impBlue       | Blue imp       |
+| impPink       | Pink imp       |
