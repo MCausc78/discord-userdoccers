@@ -2526,11 +2526,12 @@ Sent when a guild role is deleted.
 
 ###### Guild Role Delete Structure
 
-| Field    | Type      | Description         |
-| -------- | --------- | ------------------- |
-| guild_id | snowflake | The ID of the guild |
-| role_id  | snowflake | The ID of the role  |
- 
+| Field    | Type      | Description                                                  |
+| -------- | --------- | ------------------------------------------------------------ |
+| guild_id | snowflake | The ID of the guild                                          |
+| role_id  | snowflake | The ID of the role                                           |
+| version  | string    | The version of the guild serialized as a stringified integer |
+
 ### Guild Rooms
 
 #### Guild Room Connect
