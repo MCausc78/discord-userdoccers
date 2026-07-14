@@ -1922,27 +1922,49 @@ Represents a member's premium guild subscription ([boost](https://support.discor
 
 ###### Guild Room Structure
 
-| Field       | Type                                                        | Description           |
-| ----------- | ----------------------------------------------------------- | --------------------- |
-| room_id     | snowflake                                                   | The ID of the room    |
-| users       | array[[guild room user](#guild-room-user-structure) object] | The users in the room |
-| background? | ?integer                                                    | Unknown               |
+| Field       | Type                                                                       | Description                                                                         |
+| ----------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| room_id     | snowflake                                                                  | The ID of the room                                                                  |
+| users       | array[[guild room user](#guild-room-user-structure) object]                | The users in the room                                                               |
+| background? | ?integer                                                                   | Unknown                                                                             |
+| objects?    | map[integer, array[[guild room object](#guild-room-object-object) object]] | A mapping of [guild room object types](#guild-room-object-type) to the object types |
 
 ###### Guild Room User Structure
 
-| Field        | Type                                                                   | Description                          |
-| ------------ | ---------------------------------------------------------------------- | ------------------------------------ |
-| user_id      | snowflake                                                              | The ID of the user                   |
-| position?    | [guild room user position](#guild-room-user-position-structure) object | The position of the user in the room |
-| status_id?   | ???                                                                    | ???                                  |
-| status_text? | ???                                                                    | ???                                  |
+| Field        | Type                                                         | Description                          |
+| ------------ | ------------------------------------------------------------ | ------------------------------------ |
+| user_id      | snowflake                                                    | The ID of the user                   |
+| position     | [guild room position](#guild-room-position-structure) object | The position of the user in the room |
+| status_id?   | ???                                                          | ???                                  |
+| status_text? | ???                                                          | ???                                  |
 
-###### Guild Room User Position Structure
+###### Guild Room Position Structure
 
 | Field | Type  | Description          |
 | ----- | ----- | -------------------- |
 | x     | float | X coordinate (0-100) |
 | y     | float | Y coordinate (0-100) |
+
+### Guild Room Object Object
+
+###### Guild Room Object Structure
+
+| Field       | Type                                                         | Description                                              | Types  |
+| ----------- | ------------------------------------------------------------ | -------------------------------------------------------- | ------ |
+| object_id   | snowflake                                                    | The ID of the object                                     | All    |
+| object_type | integer                                                      | The [type of guild room object](#guild-room-object-type) | All    |
+| created_by  | snowflake                                                    | The ID of the user that created the object               | All    |
+| updated_at? | ?ISO8601 timestamp                                           | When the object was updated                              | All    |
+| updated_by  | snowflake                                                    | The ID of the user that updated the object               | All    |
+| content     | string                                                       | The contents of the note object                          | `NOTE` |
+| position    | [guild room position](#guild-room-position-structure) object | The position of the note object                          | `NOTE` |
+
+###### Guild Room Object Type
+
+| Value | Name  | Description  |
+| ----- | ----- | ------------ |
+| 1     | NOTE  | Note object  |
+| 2     | PLANT | Plant object |
 
 ## Endpoints
 
@@ -4082,9 +4104,15 @@ Connects to the guild room. Returns the updated [guild room](#guild-room-object)
 
 ###### JSON Params
 
-| Field    | Type                                                                   | Description  |
-| -------- | ---------------------------------------------------------------------- | ------------ |
-| position | [guild room user position](#guild-room-user-position-structure) object | The position |
+| Field    | Type                                                         | Description  |
+| -------- | ------------------------------------------------------------ | ------------ |
+| position | [guild room position](#guild-room-position-structure) object | The position |
+
+<RouteHeader method="GET" url="/guilds/{guild.id}/rooms/{channel.id}">
+  Get Guild Room
+</RouteHeader>
+
+Returns a [guild room](#guild-room-object) object for the given guild and room ID.
 
 <RouteHeader method="POST" url="/guilds/{guild.id}/rooms/{channel.id}/disconnect">
   Disconnect from Guild Room
@@ -4100,9 +4128,45 @@ Modifies the guild room. Returns the updated [guild room](#guild-room-object) ob
 
 ###### JSON Params
 
-| Field             | Type                                                                   | Description                                      |
-| ----------------- | ---------------------------------------------------------------------- | ------------------------------------------------ |
-| background?       | integer                                                                | The ID of the background (0-100) ???             |
-| user_position?    | [guild room user position](#guild-room-user-position-structure) object | The position of the user in the room             |
-| user_status_id?   | integer                                                                | The ID of the user status (0-100)                |
-| user_status_text? | string                                                                 | The text of the user status (max 512 characters) |
+| Field             | Type                                                         | Description                                      |
+| ----------------- | ------------------------------------------------------------ | ------------------------------------------------ |
+| background?       | integer                                                      | The ID of the background (0-100) ???             |
+| user_position?    | [guild room position](#guild-room-position-structure) object | The position of the current user in the room     |
+| user_status_id?   | integer                                                      | The ID of the user status (0-100)                |
+| user_status_text? | string                                                       | The text of the user status (max 512 characters) |
+
+<RouteHeader method="POST" url="/guilds/{guild.id}/rooms/{channel.id}/objects">
+  Create Guild Room Object
+</RouteHeader>
+
+Creates a guild room object. Returns a 204 empty response on success.
+
+| Field       | Type                                                         | Description                                                                        | Types  |
+| ----------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------- | ------ |
+| object_type | integer                                                      | The [type of guild room object](#guild-room-object-type) (only `NOTE` can be used) | All    |
+| content     | string                                                       | The contents of the note object (1-512 characters)                                 | `NOTE` |
+| position    | [guild room position](#guild-room-position-structure) object | The position of the note object                                                    | `NOTE` |
+
+<RouteHeader method="POST" url="/guilds/{guild.id}/rooms/{channel.id}/objects/{guild_room_object.id}/update">
+  Modify Guild Room Object
+</RouteHeader>
+
+Modifies the guild room object. Returns a 204 empty response on success.
+
+###### JSON Params
+
+| Field       | Type    | Description                                                                             |
+| ----------- | ------- | --------------------------------------------------------------------------------------- |
+| object_type | integer | The [type of the guild room object](#guild-room-object-type) (only `PLANT` can be used) |
+
+<RouteHeader method="DELETE" url="/guilds/{guild.id}/rooms/{channel.id}/objects/{guild_room_object.id}">
+  Delete Guild Room Object
+</RouteHeader>
+
+Deletes a guild room object. Returns a 204 empty response on success.
+
+###### JSON Params
+
+| Field       | Type    | Description                                                  |
+| ----------- | ------- | ------------------------------------------------------------ |
+| object_type | integer | The [type of the guild room object](#guild-room-object-type) |

@@ -34,6 +34,7 @@ export const ENDPOINT_VARS: Record<string, string | null> = {
   gift_code_batch: "/resources/entitlement#gift-code-batch-object",
   guild: "/resources/guild#guild-object",
   guild_join_request: "/resources/guild#guild-join-request-object",
+  guild_room_object: "/resources/guild#guild-room-object-object",
   guild_scheduled_event: "/resources/guild-scheduled-event#guild-scheduled-event-object",
   guild_scheduled_event_exception: "/resources/guild-scheduled-event#guild-scheduled-event-exception-object",
   integration: "/resources/integration#integration-object",
