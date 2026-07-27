@@ -1152,6 +1152,7 @@ These events directly correspond with a specific action or state change that has
 | [Voice Channel Start Time Update](#voice-channel-start-time-update)                               | Voice channel start time was updated                                                              |
 | [Voice Channel Status Update](#voice-channel-status-update)                                       | Voice channel status was updated                                                                  |
 | [Virtual Currency Balance Update](#virtual-currency-balance-update)                               | User's Orbs balance was updated                                                                   |
+| [Wallet Balance Update](#wallet-balance-update)                                                   | User's wallet balance was updated                                                                 |
 | [Webhooks Update](#webhooks-update)                                                               | Channel webhook was created, update, or deleted                                                   |
 
 #### Initial Guild
@@ -3972,6 +3973,20 @@ Sent when the current user's Orbs balance is updated.
 | Field   | Type    | Description                 |
 | ------- | ------- | --------------------------- |
 | balance | integer | Amount of Orbs the user has |
+
+### Wallets
+
+#### Wallet Balance Update
+
+Sent when the current user's wallet balance is updated.
+
+###### Wallet Balance Update Structure
+
+| Field             | Type      | Description                                                                      |
+| ----------------- | --------- | -------------------------------------------------------------------------------- |
+| payment_source_id | snowflake | The ID of the payment source                                                     |
+| balance           | integer   | Amount of money the user has                                                     |
+| currency          | string    | The lower-cased [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code |
 
 ### Webhooks
 

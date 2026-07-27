@@ -543,3 +543,16 @@ Returns whether the client should prompt the user to continue their premium purc
 </RouteHeader>
 
 Returns a list of up to 3 partial [user](/resources/user#partial-user-structure) objects representing friends with a premium subscription, used to entice the user to subscribe.
+
+<RouteHeader method="GET" url="/users/@me/billing/wallet/{payment_source.id}/information">
+  Get Wallet Information
+</RouteHeader>
+
+Returns information about the wallet for the given payment source ID.
+
+###### Response Body
+
+| Field    | Type    | Description                                                                      |
+| -------- | ------- | -------------------------------------------------------------------------------- |
+| currency | string  | The lower-cased [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code |
+| balance  | integer | Amount of money the user has                                                     |
