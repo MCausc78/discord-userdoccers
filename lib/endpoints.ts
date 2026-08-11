@@ -80,6 +80,7 @@ export const ENDPOINT_VARS: Record<string, string | null> = {
   user: "/resources/user#user-object",
   user_settings_proto_type: "/resources/user-settings-proto#user-settings-proto-type",
   user_trial_offer: "/resources/billing#user-trial-offer-object",
+  vibegration_project: "/resources/vibegration#vibegration-project-object",
   voice_state: "/resources/voice#voice-state-object",
   webhook: "/resources/webhook#webhook-object",
   widget_config: "/resources/widgets#widget-config-object",

@@ -1,0 +1,105 @@
+# Vibegrations
+
+### Vibegration Project Object
+
+###### Vibegration Project Structure
+
+| Field                   | Type               | Description                         |
+| ----------------------- | ------------------ | ----------------------------------- |
+| id                      | snowflake          | The ID of the project               |
+| application_id          | snowflake          | The ID of the resulting application |
+| guild_id?               | ?snowflake         | The ID of the guild                 |
+| preview_application_id? | snowflake          | The ID of the preview application   |
+| preview_guild_id?       | ?snowflake         | The ID of the preview guild         |
+| name                    | string             | The name of the project             |
+| updated_at?             | ?ISO8601 timestamp | When the project was updated        |
+
+## Endpoints
+
+<RouteHeader method="POST" url="/vibegrations/projects">
+  Create Vibegration Project
+</RouteHeader>
+
+Creates a vibegration project. Returns a [vibegration project](#vibegration-project-object) object on success.
+
+###### JSON Params
+
+| Field    | Type      | Description         |
+| -------- | --------- | ------------------- |
+| guild_id | snowflake | The ID of the guild |
+
+<RouteHeader method="GET" url="/vibegrations/projects/{vibegration_project.id}">
+  Get Vibegration Project
+</RouteHeader>
+
+Returns information about the project for the given vibegration project ID.
+
+###### Response Body
+
+| Field                   | Type                                                      | Description                               |
+| ----------------------- | --------------------------------------------------------- | ----------------------------------------- |
+| project                 | [vibegration project](#vibegration-project-object) object | The project                               |
+| bot_permissions_changed | boolean                                                   | Whether the bot permissions were changed  |
+| integration_installed   | boolean                                                   | Whether the bot integration was installed |
+| preview_ready           | boolean                                                   | Whether the preview is ready              |
+
+<RouteHeader method="PATCH" url="/vibegrations/projects/{vibegration_project.id}">
+  Modify Vibegration Project
+</RouteHeader>
+
+Modifies the vibegration project. Returns the updated [vibegration project](#vibegration-project-object) object on success.
+
+###### JSON Params
+
+| Field             | Type      | Description                 |
+| ----------------- | --------- | --------------------------- |
+| name?             | string    | The name of the project     |
+| preview_guild_id? | snowflake | The ID of the preview guild |
+| guild_id?         | snowflake | The ID of the guild         |
+
+<RouteHeader method="DELETE" url="/vibegrations/projects/{vibegration_project.id}">
+  Delete Vibegration Project
+</RouteHeader>
+
+Deletes the vibegration project. Returns a 204 empty response on success.
+
+<RouteHeader method="POST" url="/vibegrations/projects/{vibegration_project.id}/ws-ticket">
+  Get Vibegration Project Gateway Ticket
+</RouteHeader>
+
+Returns the gateway URL and ticket for the given project ID.
+
+###### Response Body
+
+| Field  | Type   | Description          |
+| ------ | ------ | -------------------- |
+| url    | string | The WebSocket URL    |
+| ticket | string | The WebSocket ticket |
+
+<RouteHeader method="POST" url="/vibegrations/projects/{vibegration_project.id}/publish">
+  Publish Vibegration Project
+</RouteHeader>
+
+Publishes the project.
+
+###### Response Body
+
+| Field       | Type                                                                    | Description     |
+| ----------- | ----------------------------------------------------------------------- | --------------- |
+| application | partial [application](/resources/application#application-object) object | The application |
+| project     | [vibegration project](#vibegration-project-object) object               | The project     |
+
+<RouteHeader method="POST" url="/vibegrations/projects/{vibegration_project.id}/publish-preview">
+  Publish Vibegration Project Preview
+</RouteHeader>
+
+Publishes a preview of the project.
+
+###### Response Body
+
+| Field                   | Type                                                                    | Description                               |
+| ----------------------- | ----------------------------------------------------------------------- | ----------------------------------------- |
+| application             | partial [application](/resources/application#application-object) object | The application                           |
+| bot_permissions_changed | boolean                                                                 | Whether the bot permissions were changed  |
+| integration_installed   | boolean                                                                 | Whether the bot integration was installed |
+| project                 | [vibegration project](#vibegration-project-object) object               | The project                               |

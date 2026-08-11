@@ -1,0 +1,195 @@
+# Vibegration Gateway
+
+The Vibegration Gateway allows clients to communicate with Discord AI agents and assist with creation of integrations on Discord.
+
+The Vibegration Gateway uses WebSocket connections, operating similarly to the [Gateway](/gateway/using-gateway#connections) connection.
+However, it has a separate set of payloads and events, as well as a simplified packet structure.
+
+## Gateway Payloads
+
+In practice, opcodes are lower-cased with under_scores joining each word in the name. For instance, [History](#history-structure) would be `history`.
+
+For readability, opcodes in the following documentation are typically left in Title Case.
+
+Vibegration Gateway event payloads are flat packets, with the `type` field indicating the type of payload, and the rest of the fields being the payload data.
+
+###### Example Gateway Payload
+
+```json
+{
+  "type": "history",
+  "messages": []
+}
+```
+
+###### Gateway Commands
+
+| Name                                    | Description                          |
+| --------------------------------------- | ------------------------------------ |
+| [User Message](#user-message-structure) | Sends a message to the agent session |
+
+###### Gateway Events
+
+| Name                          | Description                         |
+| ----------------------------- | ----------------------------------- |
+| [Hello](#hello-structure)     | Acknowledges a successful handshake |
+| [History](#history-structure) | Restores the chat history           |
+| [Step](#step-structure)       | Agent performed an action           |
+| [<Other>](#log-structure) ^1^ |
+
+^1^ If the event name is not `hello`, `history`, or `step`, this event should be treated as log event instead.
+
+### Connecting
+
+For the Vibegration Gateway, the URL you can use to open a WebSocket connection [is dynamic](/resources/vibegration#get-vibegration-project-gateway-ticket).
+
+When connecting to the URL, you must explicitly pass the ticket as a query parameter. For example, `wss://vibegration-gateway.discord.gg/ws?ticket=4064212b-7eb3-469b-ac11-34c79e086a02` is a URL a client may use to connect to the Gateway.
+
+###### Query String Params
+
+| Field  | Type   | Description |
+| ------ | ------ | ----------- |
+| ticket | string | The ticket  |
+
+### Handshaking
+
+Once you open a connection to the Gateway, you will receive an [Opcode Hello](#hello-structure) payload.
+
+###### Hello Structure
+
+An empty object.
+
+###### Example Hello
+
+```json
+{
+  "type": "hello"
+}
+```
+
+###### User Message Structure
+
+| Field   | Type   | Description |
+| ------- | ------ | ----------- |
+| content | string | The prompt  |
+
+###### History Structure
+
+| Field    | Type                                                  | Description              |
+| -------- | ----------------------------------------------------- | ------------------------ |
+| messages | array[[chat message](#chat-message-structure) object] | The messages in the chat |
+
+###### Chat Message Structure
+
+| Field     | Type                                    | Description                                        |
+| --------- | --------------------------------------- | -------------------------------------------------- |
+| role      | string                                  | The [role of the message](#chat-message-role-type) |
+| content   | string                                  | The message content                                |
+| ts?       | ?ISO8601 timestamp                      | When the message was sent                          |
+| kind?     | ?unknown                                | Unknown                                            |
+| proposal? | ?[proposal](#proposal-structure) object | The proposal                                       |
+
+###### Proposal Structure
+
+| Field               | Type                                                          | Description                                |
+| ------------------- | ------------------------------------------------------------- | ------------------------------------------ |
+| is_activity         | boolean                                                       | Unknown                                    |
+| summary             | string                                                        | The summary                                |
+| changes             | array[string]                                                 | The changes                                |
+| commands            | array[[proposal command](#proposal-command-structure) object] | The proposed commands                      |
+| bot_permissions?    | array[string]                                                 | The permissions to grant to the bot        |
+| privileged_intents? | array[string]                                                 | The privileged intents to grant to the bot |
+
+###### Proposal Command Structure
+
+| Field       | Type   | Description                                   |
+| ----------- | ------ | --------------------------------------------- |
+| kind        | string | The [type of command](#proposal-command-type) |
+| name        | string | The name of the command                       |
+| description | string | The description of the command                |
+
+###### Chat Message Role Type
+
+| Value     | Description                       |
+| --------- | --------------------------------- |
+| assistant | The message was sent by the agent |
+| user      | The message was sent by the user  |
+
+###### Proposal Command Type
+
+| Value  | Description |
+| ------ | ----------- |
+| launch | Launch      |
+
+###### Step Structure
+
+| Field        | Type                                              | Description                        | Kinds                                                                 |
+| ------------ | ------------------------------------------------- | ---------------------------------- | --------------------------------------------------------------------- |
+| kind         | string                                            | The [kind of the step](#step-kind) | All                                                                   |
+| message?     | string                                            | The message                        | `reply`, `announcement`, `build_error`, `healthcheck_failed`, `error` |
+| proposal?    | ?[proposal](#proposal-structure) object           | The proposal                       | `plan_proposed`                                                       |
+| project?     | ?[project usage](#project-usage-structure) object | The project usage                  | `usage`                                                               |
+| name         | string                                            | The name to rename the project to  | `project_named`                                                       |
+| detail?      | string                                            | The turn result details            | `turn_result`                                                         |
+| summary?     | string                                            | The turn result summary            | `turn_result`                                                         |
+| cost_usd?    | unknown                                           | The cost of turn in USD            | `turn_result`                                                         |
+| result?      | unknown                                           | Unknown                            | `turn_result`                                                         |
+| stderr_tail? | string                                            | The tail of standard error stream  | `reply`, `announcement`, `build_error`, `healthcheck_failed`, `error` |
+
+###### Project Usage Structure
+
+| Field        | Type                                                         | Description                     |
+| ------------ | ------------------------------------------------------------ | ------------------------------- |
+| cost_usd     | float                                                        | The cost in USD                 |
+| turns        | integer                                                      | Number of agent turns           |
+| orchestrator | [project token usage](#project-token-usage-structure) object | Token usage for orchestration   |
+| codegen      | [project token usage](#project-token-usage-structure) object | Token usage for code generation |
+
+###### Project Token Usage Structure
+
+| Field                       | Type    | Description                                                               |
+| --------------------------- | ------- | ------------------------------------------------------------------------- |
+| input_tokens                | integer | Number of input tokens which were not read from or used to create a cache |
+| output_tokens               | integer | Number of output tokens                                                   |
+| cache_creation_input_tokens | integer | Number of tokens written to the cache when creating a new entry           |
+| cache_read_input_tokens     | integer | Number of tokens retrieved from the cache for this request                |
+
+###### Step Kind
+
+| Value              | Description                           |
+| ------------------ | ------------------------------------- |
+| reply              | The agent replied                     |
+| announcement       | The agent made an announcement        |
+| plan_proposed      | The agent proposes a plan             |
+| usage              | Token usage updated                   |
+| project_named      | The agent wants to rename the project |
+| turn_result        | Agent turn result                     |
+| build_error        | The build failed                      |
+| healthcheck_failed | Health check failed                   |
+| error              | Agent error                           |
+| preview_ready      | The preview is ready                  |
+
+If `kind` is `project_named`, and the project is unnamed (empty name or the name is equal to `Untitled App`), then the client should call [Modify Vibegration Project](/resources/vibegration#modify-vibegration-project) endpoint with `name` in payload being same as `name` in event.
+
+If `kind` is `preview_ready`, the client should call [Publish Vibegration Project Preview](/resources/vibegration#publish-vibegration-project-preview) endpoint.
+
+###### Log Structure
+
+| Field   | Type    | Description                            |
+| ------- | ------- | -------------------------------------- |
+| level   | string  | The [level of log entry](#log-level)   |
+| source? | ?string | The [type of source](#log-source-type) |
+| message | string  | The log message                        |
+
+###### Log Level
+
+| Value | Description |
+| ----- | ----------- |
+| error | Error       |
+
+###### Log Source Type
+
+| Value   | Description |
+| ------- | ----------- |
+| web     | Web         |
+| preview | Preview     |
