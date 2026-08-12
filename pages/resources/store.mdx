@@ -834,23 +834,81 @@ A collection of store listings in a unified showcase.
 
 ###### Storefront Promotion Structure
 
-| Field               | Type                                                                                           | Description                                                                                |
-| ------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| id                  | snowflake                                                                                      | The ID of the storefront promotion                                                         |
-| application_id      | snowflake                                                                                      | The ID of the application                                                                  |
-| display_name?       | string                                                                                         | The display name of the storefront promotion                                               |
-| reward_type         | integer                                                                                        | The [type of storefront promotion reward config](#storefront-promotion-reward-config-type) |
-| reward_config       | [storefront promotion reward config](#storefront-promotion-reward-config-structure) object     | The storefront promotion reward config                                                     |
-| applies_to_all_skus | boolean                                                                                        | Whether the promotion applies to all SKUs                                                  |
-| starts_at?          | ?ISO8601 timestamp                                                                             | When the promotion starts                                                                  |
-| ends_at?            | ?ISO8601 timestamp                                                                             | When the promotion ends                                                                    |
-| tenant_metadata?    | [storefront promotion tenant metadata](#storefront-promotion-tenant-metadata-structure) object | Tenant metadata for the promotion                                                          |
+| Field               | Type                                                                                           | Description                                                                                              |
+| ------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| id                  | snowflake                                                                                      | The ID of the storefront promotion                                                                       |
+| application_id      | snowflake                                                                                      | The ID of the application                                                                                |
+| display_name?       | string                                                                                         | The display name of the storefront promotion                                                             |
+| reward_type         | integer                                                                                        | The [type of storefront promotion reward config](#storefront-promotion-reward-config-type)               |
+| reward_status?      | integer                                                                                        | The [status of storefront promotion reward eligibility](#storefront-promotion-reward-eligibility-status) |
+| reward_config       | [storefront promotion reward config](#storefront-promotion-reward-config-structure) object     | The storefront promotion reward config                                                                   |
+| applies_to_all_skus | boolean                                                                                        | Whether the promotion applies to all SKUs                                                                |
+| include_bundles     | boolean                                                                                        | Whether the promotion includes bundle SKUs                                                               |
+| starts_at?          | ?ISO8601 timestamp                                                                             | When the promotion starts                                                                                |
+| ends_at?            | ?ISO8601 timestamp                                                                             | When the promotion ends                                                                                  |
+| tenant_metadata?    | [storefront promotion tenant metadata](#storefront-promotion-tenant-metadata-structure) object | Tenant metadata for the promotion                                                                        |
 
 ###### Storefront Promotion Tenant Metadata Structure
 
-| Field         | Type                                                                                                       | Description                            |
-| ------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| social_layer? | [social layer storefront promotion metadata](#social-layer-storefront-promotion-metadata-structure) object | Social layer storefront promotion data |
+| Field         | Type                                                                                                        | Description                            |
+| ------------- | ----------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| collectibles? | ?[collectibles promotion metadata](#collectibles-promotion-metadata-structure) object                       | Collectibles promotion data            |
+| social_layer? | ?[social layer storefront promotion metadata](#social-layer-storefront-promotion-metadata-structure) object | Social layer storefront promotion data |
+
+###### Collectibles Promotion Metadata Structure
+
+| Field   | Type                                                                                               | Description                      |
+| ------- | -------------------------------------------------------------------------------------------------- | -------------------------------- |
+| reward? | [collectibles reward promotion metadata](#collectibles-reward-promotion-metadata-structure) object | The information about the reward |
+
+###### Collectibles Reward Promotion Metadata Structure
+
+| Field       | Type                                                                                                       | Description                                |
+| ----------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| storefront? | [collectibles promotion metadata storefront](#collectibles-promotion-metadata-storefront-structure) object | The information about the storefront       |
+| checkout?   | [collectibles promotion metadata checkout](#collectibles-promotion-metadata-checkout-structure) object     | The information about the checkout         |
+| collected?  | [collectibles promotion metadata collected](#collectibles-promotion-metadata-collected-structure) object   | The information about the collected reward |
+| flavor?     | ?string                                                                                                    | The flavor                                 |
+
+###### Collectibles Promotion Metadata Storefront Structure
+
+| Field   | Type                                                                                                                     | Description                      |
+| ------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------- |
+| nagbar? | [collectibles promotion metadata storefront nagbar](#collectibles-promotion-metadata-storefront-nagbar-structure) object | The information about the nagbar |
+
+###### Collectibles Promotion Metadata Storefront Nagbar Structure
+
+| Field           | Type                                                                                                                              | Description                       |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| header_text?    | ?string                                                                                                                           | The header text                   |
+| cta?            | ?[collectibles promotion metadata storefront nagbar CTA](#collectibles-promotion-metadata-storefront-nagbar-cta-structure) object | The information about the CTA     |
+| help_center_id? | ?string                                                                                                                           | The ID of the help center article |
+| icon?           | ?unknown                                                                                                                          | Unknown                           |
+
+###### Collectibles Promotion Metadata Storefront Nagbar CTA Structure
+
+| Field | Type    | Description         |
+| ----- | ------- | ------------------- |
+| text? | ?string | The text on the CTA |
+
+###### Collectibles Promotion Metadata Checkout Structure
+
+| Field         | Type                                                                                                           | Description               |
+| ------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| offer_notice? | [collectibles promotion metadata offer notice](#collectibles-promotion-metadata-offer-notice-structure) object | The checkout offer notice |
+
+###### Collectibles Promotion Metadata Offer Notice Structure
+
+| Field | Type     | Description                  |
+| ----- | -------- | ---------------------------- |
+| icon? | ?unknown | Unknown                      |
+| text? | ?string  | The text on the offer notice |
+
+###### Collectibles Promotion Metadata Collected Structure
+
+| Field           | Type    | Description        |
+| --------------- | ------- | ------------------ |
+| override_title? | ?string | The title override |
 
 ###### Social Layer Storefront Promotion Metadata Structure
 
@@ -866,23 +924,32 @@ A collection of store listings in a unified showcase.
 | Field    | Type                                                                                                          | Description         |
 | -------- | ------------------------------------------------------------------------------------------------------------- | ------------------- |
 | discount | ?[storefront promotion reward config discount](#storefront-promotion-reward-config-discount-structure) object | The discount reward |
-| action?  | ?[storefront promotion reward config action](#storefront-promotion-reward-config-action-structure) object     | The action reward   |
+| action   | ?[storefront promotion reward config action](#storefront-promotion-reward-config-action-structure) object     | The action reward   |
 
 ###### Storefront Promotion Reward Config Discount Structure
 
-| Field         | Type    | Description                                                  |
-| ------------- | ------- | ------------------------------------------------------------ |
-| id            | unknown | Unknown                                                      |
-| type          | integer | The [type of storefront discount](#storefront-discount-type) |
-| amount        | integer | How much the discount is                                     |
-| fiat_enabled? | boolean | Unknown                                                      |
-| orbs_enabled? | boolean | Whether the discount applies to Orbs                         |
+| Field         | Type      | Description                                                  |
+| ------------- | --------- | ------------------------------------------------------------ |
+| id            | snowflake | The ID of the storefront discount                            |
+| type          | integer   | The [type of storefront discount](#storefront-discount-type) |
+| amount        | integer   | How much the discount is                                     |
+| fiat_enabled? | boolean   | Unknown                                                      |
+| orbs_enabled? | boolean   | Whether the discount applies to Orbs                         |
 
 ###### Storefront Promotion Reward Config Action Structure
 
 | Field       | Type    | Description                                                                                              |
 | ----------- | ------- | -------------------------------------------------------------------------------------------------------- |
 | action_type | integer | The [type of storefront promotion reward config action](#storefront-promotion-reward-config-action-type) |
+
+###### Storefront Promotion Reward Eligibility Status
+
+| Value | Name         | Description                     |
+| ----- | ------------ | ------------------------------- |
+| 1     | EARNED       | Reward is earned                |
+| 2     | IN_PROGRESS  | Reward is in progress           |
+| 3     | NOT_ELIGIBLE | User is not eligible for reward |
+| 4     | CONSUMED     | Reward is consumed              |
 
 ###### Storefront Discount Type
 
@@ -901,14 +968,16 @@ The values of this enum are currently unknown. Help us by figuring them out and 
 
 ###### Partial Storefront Promotion Structure
 
-| Field       | Type                                                                                       | Description                        |
-| ----------- | ------------------------------------------------------------------------------------------ | ---------------------------------- |
-| id          | snowflake                                                                                  | The ID of the storefront promotion |
-| ends_at?    | ?ISO8601 timestamp                                                                         | When the promotion ends at         |
-| pdp?        | [storefront promotion label section](#storefront-promotion-label-section-structure) object | The product display page section   |
-| storefront? | [storefront promotion header](#storefront-promotion-header-structure) object               | The storefront promotion header    |
-| checkout?   | [storefront promotion label section](#storefront-promotion-label-section-structure) object | The checkout page section          |
-| vc_stream?  | [storefront promotion label section](#storefront-promotion-label-section-structure) object | The voice channel stream section   |
+| Field          | Type                                                                                       | Description                                                                                              |
+| -------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| id             | snowflake                                                                                  | The ID of the storefront promotion                                                                       |
+| ends_at?       | ?ISO8601 timestamp                                                                         | When the promotion ends at                                                                               |
+| pdp?           | [storefront promotion label section](#storefront-promotion-label-section-structure) object | The product display page section                                                                         |
+| storefront?    | [storefront promotion header](#storefront-promotion-header-structure) object               | The storefront promotion header                                                                          |
+| checkout?      | [storefront promotion label section](#storefront-promotion-label-section-structure) object | The checkout page section                                                                                |
+| vc_stream?     | [storefront promotion label section](#storefront-promotion-label-section-structure) object | The voice channel stream section                                                                         |
+| flavor?        | ?string                                                                                    | The flavor                                                                                               |
+| reward_status? | integer                                                                                    | The [status of storefront promotion reward eligibility](#storefront-promotion-reward-eligibility-status) |
 
 ###### Storefront Promotion Header Structure
 
@@ -2248,11 +2317,12 @@ Returns the promotion currently running for Social Layer integrated storefronts.
 
 ###### Response Body
 
-| Field                  | Type                                                            | Description                               |
-| ---------------------- | --------------------------------------------------------------- | ----------------------------------------- |
-| promotional_sku_ids    | array[snowflake]                                                | The IDs of the promotional store listings |
-| promotion_end_datetime | ?ISO8601 timestamp                                              | When the promotion ends                   |
-| storefronts            | array[[storefront config](#storefront-config-structure) object] | The storefronts                           |
+| Field                      | Type                                                                                                          | Description                                             |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| promotional_sku_ids        | array[snowflake]                                                                                              | The IDs of the promotional store listings               |
+| promotion_end_datetime     | ?ISO8601 timestamp                                                                                            | When the promotion ends                                 |
+| storefronts                | array[[storefront config](#storefront-config-structure) object]                                               | The storefronts                                         |
+| announcement_modal_config? | ?[storefront launch announcement modal config](#storefront-launch-announcement-modal-config-structure) object | The config for the storefront launch announcement modal |
 
 ###### Storefront Config Structure
 
@@ -2267,13 +2337,24 @@ Returns the promotion currently running for Social Layer integrated storefronts.
 | promotion_end_datetime               | ?ISO8601 timestamp | When the promotion ends                                                                                              |
 | allow_orbs_spending                  | boolean            | Whether purchasing the storefront SKUs gives Orbs                                                                    |
 
+###### Storefront Launch Announcement Modal Config Structure
+
+| Field          | Type      | Description                                  |
+| -------------- | --------- | -------------------------------------------- |
+| version        | integer   | The version of the announcement modal config |
+| application_id | snowflake | The ID of the application                    |
+
 ###### Storefront Platform Type
 
-| Value       | Description |
-| ----------- | ----------- |
-| desktop     | Desktop     |
-| xbox        | Xbox        |
-| playstation | PlayStation |
+| Value        | Description     |
+| ------------ | --------------- |
+| desktop      | Desktop         |
+| xbox         | Xbox            |
+| playstation  | PlayStation     |
+| switch       | Nintendo Switch |
+| apple arcade | Apple Arcade    |
+| netflix      | Netflix         |
+| amazon kids+ | Amazon Kids+    |
 
 <RouteHeader method="GET" url="/partner-sdk/storefront-eligibility">
   Get Social Layer Storefront Eligibilities
@@ -2313,3 +2394,29 @@ If it exists, returns a response below representing the storefront launch announ
 | asset_url | string | The URL of the feature asset      |
 | title     | string | The title of the feature asset    |
 | subtitle  | string | The subtitle of the feature asset |
+
+###### Example Response
+
+```json
+{
+  "application_id": "614380482620293151",
+  "light_theme_logo_url": "https://cdn.discordapp.com/assets/content/a72a057c927f48664f05d63c79d477ab3f8fe89946a06be29c02d0b7242928f8.png",
+  "dark_theme_logo_url": "https://cdn.discordapp.com/assets/content/25dd3eedeeeb590419a5399c90020390f8be5214ec6cf6364c0118c172a44fc3.png",
+  "background_url": "https://cdn.discordapp.com/assets/content/247bc84fb66c3c9e22d42854bdc16db2ca73068ef6e94077c3193548da480a5f.png",
+  "titles": ["Buy it on Discord.", "Get it in Bloons TD 6"],
+  "subtitle": "Shop for Bloons TD 6 in-game items on Discord and activate them instantly in-game",
+  "features": [
+    {
+      "asset_url": "https://cdn.discordapp.com/assets/content/344a9498d8e06f1b777d0b29704e209e8b3a00d8d307564c67efb20c17e18feb.png",
+      "title": "50% Off. Only on Discord",
+      "subtitle": "Launch sale with 50% off everything! Ends Aug 19."
+    },
+    {
+      "asset_url": "https://cdn.discordapp.com/assets/content/d44635d4d81b230ea278dc07cbb89fafc6780c128be6e0380962c4290b6edd5f.png",
+      "title": "Free Wumpus Pet!",
+      "subtitle": "Get an exclusive Bloons TD 6 Wumpus pet with your first purchase!"
+    }
+  ],
+  "button_text": "Visit the Bloons TD 6 Shop"
+}
+```
