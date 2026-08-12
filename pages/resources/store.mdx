@@ -806,13 +806,13 @@ A collection of store listings in a unified showcase.
 
 ###### Storefront Page Structure
 
-| Field          | Type                                                                        | Description                                      |
-| -------------- | --------------------------------------------------------------------------- | ------------------------------------------------ |
-| title?         | string                                                                      | The title of the page (max 256 characters)       |
-| leaderboard?   | [storefront leaderboard](#storefront-leaderboard-structure) object          | The leaderboard on the page                      |
-| sku_ids        | array[snowflake]                                                            | The IDs of the SKUs on the page (max 100)        |
-| custom_sku_ids | array[string]                                                               | The IDs of the custom SKUs on the page (max 100) |
-| sections?      | array[[storefront page section](#storefront-page-section-structure) object] | The sections on the page (max 5)                 |
+| Field          | Type                                                                        | Description                                                                                |
+| -------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| title?         | string                                                                      | The title of the page (max 256 characters)                                                 |
+| leaderboard?   | [storefront leaderboard](#storefront-leaderboard-structure) object          | The leaderboard on the page                                                                |
+| sku_ids        | array[snowflake]                                                            | The IDs of the SKUs on the page (max 100)                                                  |
+| custom_sku_ids | array[string]                                                               | The IDs of the custom SKUs on the page, in the same order as the `sku_ids` array (max 100) |
+| sections?      | array[[storefront page section](#storefront-page-section-structure) object] | The sections on the page (max 5)                                                           |
 
 ###### Storefront Leaderboard Structure
 
@@ -824,11 +824,11 @@ A collection of store listings in a unified showcase.
 
 ###### Storefront Page Section Structure
 
-| Field          | Type             | Description                                              |
-| -------------- | ---------------- | -------------------------------------------------------- |
-| title?         | string           | The title of the page section (max 256 characters)       |
-| sku_ids        | array[snowflake] | The IDs of the SKUs on the page section (max 100)        |
-| custom_sku_ids | array[string]    | The IDs of the custom SKUs on the page section (max 100) |
+| Field          | Type             | Description                                                                                        |
+| -------------- | ---------------- | -------------------------------------------------------------------------------------------------- |
+| title?         | string           | The title of the page section (max 256 characters)                                                 |
+| sku_ids        | array[snowflake] | The IDs of the SKUs on the page section (max 100)                                                  |
+| custom_sku_ids | array[string]    | The IDs of the custom SKUs on the page section, in the same order as the `sku_ids` array (max 100) |
 
 ### Storefront Promotion Object
 
@@ -2228,12 +2228,13 @@ Returns the storefront associated with the given SKU ID.
 
 ###### Response Body
 
-| Field               | Type                                                         | Description             |
-| ------------------- | ------------------------------------------------------------ | ----------------------- |
-| store_listing       | [store listing](#store-listing-object) object                | The store listing       |
-| assets              | array[[store asset](#store-asset-object) object]             | The store assets        |
-| storefront_metadata | [storefront metadata](#storefront-metadata-structure) object | The storefront metadata |
-| storefront_pricing  | [storefront prices](#storefront-prices-object) object        | The storefront prices   |
+| Field               | Type                                                                                | Description                                            |
+| ------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| store_listing       | [store listing](#store-listing-object) object                                       | The store listing                                      |
+| assets              | array[[store asset](#store-asset-object) object]                                    | The store assets                                       |
+| storefront_metadata | [storefront metadata](#storefront-metadata-structure) object                        | The storefront metadata                                |
+| storefront_pricing  | [storefront prices](#storefront-prices-object) object                               | The storefront prices                                  |
+| promotions?         | map[snowflake, partial [storefront promotion](#storefront-promotion-object) object] | A mapping of storefront promotion IDs to the promotion |
 
 <RouteHeader method="GET" url="/partner-sdk/guilds/{guild.id}/application-storefront/announcement">
   Get Guild Application Storefront Announcement

@@ -318,9 +318,19 @@ As interaction responses and followups are webhooks, they respect @everyone's ab
 
 ###### Interaction Callback Social Layer SKU Purchase Eligibility Data Structure
 
-| Field    | Type    | Description                                                  |
-| -------- | ------- | ------------------------------------------------------------ |
-| eligible | boolean | Whether the user is eligible for a social layer SKU purchase |
+| Field                          | Type     | Description                                                   |
+| ------------------------------ | -------- | ------------------------------------------------------------- |
+| eligible                       | boolean  | Whether the user is eligible for a social layer SKU purchase  |
+| ineligible_reason?             | ?integer | The [reason for SKU ineligibility](#sku-ineligibility-reason) |
+| ineligible_reason_description? | ?string  | The detailed ineligibility reason (max 255 characters)        |
+
+###### SKU Ineligibility Reason
+
+| Value | Name                         | Description                                        |
+| ----- | ---------------------------- | -------------------------------------------------- |
+| 0     | OTHER                        | Other                                              |
+| 1     | OWNS_SKU_OR_BUNDLE_COMPONENT | User already owns the SKU or one of its components |
+| 2     | PLATFORM_RESTRICTION         | User does not have game account linked             |
 
 When responding to an interaction received **via webhook**, your server can simply respond to the received `POST` request. You'll want to respond with a `200` status code (if everything went well), as well as specifying a `type` and `data`, which is an [Interaction Response](#interaction-response-object) object:
 
