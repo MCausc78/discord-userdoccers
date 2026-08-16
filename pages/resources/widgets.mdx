@@ -37,24 +37,25 @@ A tile on a user's profile showcasing their gaming interests.
 | type      | string                                                                                  | The [type of the personal widget section](#personal-widget-section-type) | All      |
 | title?    | string                                                                                  | The title of the personal widget section                                 | `cover`  |
 | subtitle? | string                                                                                  | The subtitle of the personal widget section                              | `cover`  |
-| image?    | ?[widget image](#widget-image-structure) object                                         | The image on the personal widget section                                 | `cover`  |
+| image?    | ?[widget asset](#widget-asset-structure) object                                         | The image asset on the personal widget section                           | `cover`  |
 | fields    | array[[personal widget section field](#personal-widget-section-field-structure) object] | The fields on the personal widget section                                | `fields` |
 
 ###### Personal Widget Section Field Structure
 
-| Field        | Type                                            | Description                                    |
-| ------------ | ----------------------------------------------- | ---------------------------------------------- |
-| title?       | string                                          | The title                                      |
-| description? | string                                          | The description                                |
-| image?       | ?[widget image](#widget-image-structure) object | The image in the personal widget section field |
+| Field        | Type                                            | Description                                          |
+| ------------ | ----------------------------------------------- | ---------------------------------------------------- |
+| title?       | string                                          | The title                                            |
+| description? | string                                          | The description                                      |
+| image?       | ?[widget asset](#widget-asset-structure) object | The image asset in the personal widget section field |
 
-###### Widget Image Structure
+###### Widget Asset Structure
 
-| Field   | Type    | Description             |
-| ------- | ------- | ----------------------- |
-| file_id | unknown | Unknown                 |
-| width   | integer | The width of the imgae  |
-| height  | integer | The height of the image |
+| Field       | Type      | Description                   |
+| ----------- | --------- | ----------------------------- |
+| file_id     | snowflake | The ID of the file            |
+| width       | integer   | The width of the asset        |
+| height      | integer   | The height of the asset       |
+| is_animated | boolean   | Whether the asset is animated |
 
 ###### Widget Type
 
