@@ -164,7 +164,7 @@ This structure is a superset of the [detectable application](#detectable-applica
 | websites?             | array[[game website](#game-website-structure) object]            | The websites relating to the game                                  |
 | companies             | array[[company](#company-structure) object]                      | The companies working on the game                                  |
 | steam_release_status? | integer                                                          | The [game release status on Steam](#steam-release-status)          |
-| reviews?              | [game data reviews](#game-data-reviews-structure)                | The reviews of the game                                            |
+| reviews?              | [game reviews](#game-reviews-structure)                          | The reviews of the game                                            |
 | opencritic_url?       | string                                                           | The URL to reviews on OpenCritic                                   |
 | shop_collection_ids?  | array[snowflake]                                                 | The IDs of the storefront collections                              |
 | l30_rank?             | integer                                                          | The popularity rank of the game over a 30-day window               |
@@ -247,12 +247,12 @@ This structure is a superset of the [detectable application](#detectable-applica
 
 ###### Game Reviews Structure
 
-| Field       | Type                                                                 | Description               |
-| ----------- | -------------------------------------------------------------------- | ------------------------- |
-| steam?      | [steam game reviews](#steam-game-reviews-structure) object           | The reviews on Steam      |
-| opencritic? | [opencritic game reviews](#opencritic-game-reviews-structure) object | The reviews on OpenCritic |
+| Field       | Type                                                       | Description               |
+| ----------- | ---------------------------------------------------------- | ------------------------- |
+| steam?      | [steam reviews](#steam-reviews-structure) object           | The reviews on Steam      |
+| opencritic? | [opencritic reviews](#opencritic-reviews-structure) object | The reviews on OpenCritic |
 
-###### Steam Game Reviews Structure
+###### Steam Reviews Structure
 
 | Field                   | Type    | Description                                                                                               |
 | ----------------------- | ------- | --------------------------------------------------------------------------------------------------------- |
@@ -263,7 +263,7 @@ This structure is a superset of the [detectable application](#detectable-applica
 | localized_rating?       | float   | Positive review ratio filtered to reviews written in the user's locale, as a value between 0 and 100      |
 | localized_rating_count? | integer | Total number of reviews written in the user's locale                                                      |
 
-###### Game Data OpenCritic Reviews Structure
+###### OpenCritic Reviews Structure
 
 | Field                   | Type     | Description                                            |
 | ----------------------- | -------- | ------------------------------------------------------ |
