@@ -286,11 +286,12 @@ Creetes a listening content inventory entry. Returns a 204 empty response on suc
 
 ###### Spotify Track Structure
 
-| Field  | Type                                                         | Description                                                          |
-| id     | string                                                       | The ID of the track (max 64 characters)                              |
-| name   | string                                                       | The name of the track (max 1024 characters)                          |
-| type   | string                                                       | The [type of the resource](#spotify-resource-type) (must be `track`) |
-| album? | [spotify track album](#spotify-track-album-structure) object |
+| Field  | Type                                                         | Description                                                       |
+| ------ | ------------------------------------------------------------ | ----------------------------------------------------------------- |
+| id     | string                                                       | The ID of the track (max 64 characters)                           |
+| name   | string                                                       | The name of the track (max 1024 characters)                       |
+| type   | string                                                       | The [type of the resource](#spotify-resource-type) (only `track`) |
+| album? | [spotify track album](#spotify-track-album-structure) object | The album of the track                                            |
 
 ###### Spotify Track Album Structure
 
