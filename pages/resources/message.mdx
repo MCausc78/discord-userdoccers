@@ -1514,14 +1514,14 @@ Age verification system messages are sent by the official Discord account to not
 
 ###### Guild Space Leaderboard Message Data Structure
 
-| Field             | Type      | Description                                                                                         |
-| ----------------- | --------- | --------------------------------------------------------------------------------------------------- |
-| event             | integer   | The [type of the leaderboard event](#guild-space-leaderboard-message-event-type)                    |
-| stat              | integer   | The [statistic type](/resources/guild#gaming-leaderboard-statistic-type) of the current competition |
-| user_id           | snowflake | The ID of the primary user                                                                          |
-| secondary_user_id | snowflake | The ID of the secondary user                                                                        |
-| value             | integer   | The primary value for the message                                                                   |
-| secondary_value   | integer   | The secondary value for the message                                                                 |
+| Field              | Type      | Description                                                                                         |
+| ------------------ | --------- | --------------------------------------------------------------------------------------------------- |
+| event              | integer   | The [type of the leaderboard event](#guild-space-leaderboard-message-event-type)                    |
+| stat               | integer   | The [statistic type](/resources/guild#gaming-leaderboard-statistic-type) of the current competition |
+| user_id            | snowflake | The ID of the primary user                                                                          |
+| secondary_user_id? | snowflake | The ID of the secondary user                                                                        |
+| value              | integer   | The primary value for the message                                                                   |
+| secondary_value    | integer   | The secondary value for the message                                                                 |
 
 ###### Guild Space Music Competition Message Data Structure
 
